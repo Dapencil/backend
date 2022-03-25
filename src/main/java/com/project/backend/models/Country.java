@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Countries")
+@Table(name = "countries")
 public class Country {
 
     @Id

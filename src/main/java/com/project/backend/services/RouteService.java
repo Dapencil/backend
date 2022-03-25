@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class RouteService {
@@ -28,7 +30,13 @@ public class RouteService {
         repository.save(route);
         return route;
     }
-
+    public boolean checkRouteCode(String s){ //check CU100
+        final String regex = "CU[0-9]{3}";
+        final String string = s;
+        final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        final Matcher matcher = pattern.matcher(string);
+        return matcher.matches();
+    }
     public List<Route> getAllRoute(){
         return repository.findAll();
     }

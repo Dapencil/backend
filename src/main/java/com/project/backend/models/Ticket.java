@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Tickets")
+@Table(name = "tickets")
 public class Ticket {
 
     @Id

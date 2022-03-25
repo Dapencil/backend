@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "Airports")
+@Table(name = "airports")
 public class Airport {
 
     @Id

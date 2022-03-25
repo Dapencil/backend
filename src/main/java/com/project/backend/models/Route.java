@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Routes")
+@Table(name = "routes")
 public class Route {
 
     @Id

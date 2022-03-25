@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Promotions")
+@Table(name = "promotions")
 public class Promotion {
 
     @Id

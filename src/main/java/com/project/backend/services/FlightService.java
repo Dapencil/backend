@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -30,6 +32,8 @@ public class FlightService {
     }
 
     public void addFlight(String routeCode,String planeCode,String departureTime,Double fare){
+        if(fare < 0){ return; }
+        if (!checkTime(departureTime)) { return; }
         Flight flight = new Flight();
         flight.setRouteCode(routeCode);
         flight.setPlaneCode(planeCode);
@@ -37,7 +41,13 @@ public class FlightService {
         flight.setFare(fare);
         repository.save(flight);
     }
-
+    public boolean checkTime(String time){
+        final String regex = "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$";
+        final String string = time;
+        final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        final Matcher matcher = pattern.matcher(string);
+        return matcher.matches();
+    }
     private int getTakenTimeFromRoute(String routeCode){
         Route route = routeService.getAllRoute().stream().filter(t -> t.getCode().equals(routeCode)).collect(Collectors.toList()).get(0);
         return route.getTakenTime();

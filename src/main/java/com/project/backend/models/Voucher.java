@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Vouchers")
+@Table(name = "vouchers")
 public class Voucher {
 
     @Id
