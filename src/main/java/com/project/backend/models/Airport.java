@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "airports")
+@Table(name = "airport")
 public class Airport {
 
     @Id
@@ -34,4 +34,6 @@ public class Airport {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "time_zone")
+    private String time_zone;
 }

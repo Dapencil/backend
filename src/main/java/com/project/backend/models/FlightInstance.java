@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "flightInstances")
+@Table(name = "flightInstance")
 public class FlightInstance {
 
     @Id
@@ -27,5 +27,8 @@ public class FlightInstance {
 
     @Column(name = "flight_date")
     private LocalDateTime flightDate;
+
+    @Column(name = "aircraft_reg_num")
+    private String aircraftRegNum;
 
 }

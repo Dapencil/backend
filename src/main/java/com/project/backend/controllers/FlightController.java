@@ -1,6 +1,7 @@
 package com.project.backend.controllers;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.project.backend.models.Flight;
 import com.project.backend.services.FlightInstanceService;
 import com.project.backend.services.FlightService;
 
@@ -27,6 +28,15 @@ public class FlightController {
         flightService.addFlight(routeCode,planeCode,departureTime,fare);
         flightService.addFlight(routeCode,planeCode,backDepartTime,fare);
         return backDepartTime;
+    }
+    @PutMapping("update/{id}")
+    public boolean updateFlight(@RequestBody Flight flight, @PathVariable Integer flightId){
+        return flightService.updateFlight(flight.getFlightId(),flight.getRouteCode(),
+                flight.getICAOCode(),flight.getDepartureTime(),flight.getFare());
+    }
+    @DeleteMapping("delete/{id}")
+    public boolean deleteFlight(@PathVariable Integer flightId){
+        return flightService.deleteFlight(flightId);
     }
 
 

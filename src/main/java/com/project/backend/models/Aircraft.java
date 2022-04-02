@@ -16,23 +16,23 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "promotion")
-public class Promotion {
+@Table(name = "aircraft")
+public class Aircraft {
 
     @Id
-    @Column(name = "id")
-    private String id;
+    @Column(name = "reg_number")
+    private String regNum;
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "ICAO_code")
+    private String ICAOCode;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "MSN")
+    private String msn;
 
-    @Column(name = "discount_amount")
-    private Integer discountAmount;
+    @Column(name = "first_flight")
+    private LocalDate fFlight;
 
-    @Column(name = "end_date")
-    private LocalDate endDate;
+    @Column(name = "deliver_flight")
+    private LocalDate dFlight;
 
 }

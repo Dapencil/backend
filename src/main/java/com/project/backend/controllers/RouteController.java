@@ -7,10 +7,9 @@ import com.project.backend.services.AirportService;
 import com.project.backend.services.RouteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -23,7 +22,7 @@ public class RouteController {
     @Autowired
     private AirportService airportService;
 
-    @PostMapping("")
+    @PostMapping("add")
     public String addRoute(@RequestBody ObjectNode objectNode){
         String tempFrom = objectNode.get("from").asText();
         String tempTo = objectNode.get("to").asText();
@@ -36,7 +35,22 @@ public class RouteController {
         }catch (Exception e){
             return e.getMessage();
         }
-
+    }
+    @GetMapping("getAll")
+    public List<Route> getRoute() {
+        return routeService.getAllRoute();
+    }
+    @GetMapping("get/{routeCode}")
+    public Route getRouteByCode(@PathVariable String routeCode){
+        return routeService.findRouteByRouteCode(routeCode);
+    }
+    @PutMapping("update/{routeCode}")
+    public boolean updateRoute(@RequestBody Route route, @PathVariable String routeCode){
+        return routeService.updateRoute(route.getCode(),route.getFromAirport(),route.getToAirport());
+    }
+    @DeleteMapping("delete/{code}")
+    public boolean deleteRoute(@PathVariable String code){
+        return routeService.deleteRoute(code);
     }
 
 }

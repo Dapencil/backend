@@ -1,5 +1,6 @@
 package com.project.backend.services;
 
+import com.project.backend.models.Airport;
 import com.project.backend.models.Flight;
 import com.project.backend.models.Route;
 import com.project.backend.repositories.FlightRepository;
@@ -8,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -31,15 +34,17 @@ public class FlightService {
         return repository.findAll();
     }
 
-    public void addFlight(String routeCode,String planeCode,String departureTime,Double fare){
-        if(fare < 0){ return; }
-        if (!checkTime(departureTime)) { return; }
+    public boolean addFlight(String routeCode, String icao, String departureTime, Double fare){
+        if(fare < 0){ return false; }
+//        if (!checkTime(departureTime)) { return false; }
         Flight flight = new Flight();
         flight.setRouteCode(routeCode);
-        flight.setPlaneCode(planeCode);
-        flight.setDepartureTime(departureTime);
+        flight.setICAOCode(icao);
+        LocalTime time = LocalTime.parse(departureTime);
+        flight.setDepartureTime(time);
         flight.setFare(fare);
         repository.save(flight);
+        return true;
     }
     public boolean checkTime(String time){
         final String regex = "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$";
@@ -65,5 +70,26 @@ public class FlightService {
         } catch (Exception e) {
             return e.getMessage();
         }
+    }
+
+    public boolean deleteFlight(Integer flightId) {
+        Optional<Flight> flight = repository.findById(flightId);
+        if (flight.isPresent()) {
+            repository.delete(flight.get());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateFlight(Integer flightId, String routeCode, String icaoCode, LocalTime departureTime, Double fare) {
+        Optional<Flight> flight = repository.findById(flightId);
+        if (flight.isEmpty()){ return false;}
+        flight.get().setRouteCode(routeCode);
+        flight.get().setICAOCode(icaoCode);
+//        LocalTime time = LocalTime.parse(departureTime);
+        flight.get().setDepartureTime(departureTime);
+        flight.get().setFare(fare);
+        repository.save(flight.get());
+        return true;
     }
 }

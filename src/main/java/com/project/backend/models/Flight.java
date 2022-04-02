@@ -6,28 +6,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "flights")
+@Table(name = "flight")
 public class Flight {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "flight_id")
+    @Column(name = "id")
     private Integer flightId;
 
     @Column(name = "route_code")
     private String routeCode;
 
-    @Column(name = "plane_code")
-    private String planeCode;
+    @Column(name = "ICAO_code")
+    private String ICAOCode;
 
     @Column(name = "departure_time")
-    private String departureTime;
+    private LocalTime departureTime;
 
     @Column(name = "fare")
     private Double fare;

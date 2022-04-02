@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("api/airport")
 public class AirportController {
-
     @Autowired
     private AirportService airportService;
 
@@ -22,13 +21,22 @@ public class AirportController {
     public List<Airport> getAirports() {
         return airportService.getAirport();
     }
-    @GetMapping("getByCode")
-    public Airport getAirportByCode(@RequestParam(name = "code") String code){
+    @GetMapping("get/{code}")
+    public Airport getAirportByCode(@PathVariable String code){
         return airportService.findAirportByCode(code);
     }
     @PostMapping("add")
-    public int addAirport(@RequestBody Airport airport){
+    public boolean addAirport(@RequestBody Airport airport){
         return airportService.addAirport(airport.getCode(),airport.getCountry_code(),
-                airport.getLatitude(),airport.getLongtitude(),airport.getName());
+                airport.getLatitude(),airport.getLongtitude(),airport.getName(),airport.getTime_zone());
+    }
+    @PutMapping("update/{code}")
+    public boolean updateAirport(@RequestBody Airport airport, @PathVariable String code){
+        return airportService.updateAirport(airport.getCode(),airport.getCountry_code(),
+                airport.getLatitude(),airport.getLongtitude(),airport.getName(),airport.getTime_zone());
+    }
+    @DeleteMapping("delete/{code}")
+    public boolean deleteAirport(@PathVariable String code){
+        return airportService.deleteAirport(code);
     }
 }

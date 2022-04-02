@@ -9,13 +9,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tickets")
+@Table(name = "ticket")
 public class Ticket {
 
     @Id
@@ -31,4 +32,6 @@ public class Ticket {
     @Column(name = "voucher_code")
     private String voucherCode;
 
+    @Column(name = "issued_date")
+    private LocalDateTime issueDate;
 }
