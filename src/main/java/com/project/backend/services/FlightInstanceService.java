@@ -35,7 +35,7 @@ public class FlightInstanceService {
 
             FlightInstance recent = getRecentInstance(returnFlight.getFlightId()+"");
 
-            LocalTime toTime = timeFormatter(toFLight.getDepartureTime());
+            LocalTime toTime = toFLight.getDepartureTime();
             LocalDateTime toDate = recent.getFlightDate();
             LocalDateTime returnDate;
             boolean condition = toTime.getHour() < recent.getFlightDate().plusMinutes(takenTime).getHour();
@@ -69,7 +69,7 @@ public class FlightInstanceService {
 
             //ตอนนี้ต้องหาวันที่มากที่สุดแล้ว
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            LocalTime toTime = LocalTime.parse(toFLight.getDepartureTime(),formatter);
+            LocalTime toTime = toFLight.getDepartureTime();
             LocalDateTime toDate = LocalDateTime.now().with(toTime).plusDays(1);
             LocalDateTime returnDate = toDate.plusMinutes(takenTime+60);
             LocalDateTime arrivalReturnDate = returnDate.plusMinutes(takenTime);

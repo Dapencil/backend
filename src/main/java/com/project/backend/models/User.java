@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -15,7 +16,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Users")
+@Table(name = "user")
 @IdClass(UserPK.class)
 public class User {
 
@@ -36,13 +37,16 @@ public class User {
     @Column(name = "l_name")
     private String lastName;
 
-    @Column(name = "date_of_brith")
-    private Date dob;
+    @Column(name = "regis_date")
+    private LocalDate regisDate;
 
-    @Column(name = "payment_number")
-    private String paymentNumber;
+    @Column(name = "date_of_brith")
+    private LocalDate dob;
 
     @Column(name = "total_mile")
     private Integer totalMile;
+
+    @Column(name = "role")
+    private String role;
 
 }

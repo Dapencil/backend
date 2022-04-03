@@ -1,11 +1,13 @@
 package com.project.backend.services;
 
+import com.project.backend.models.Airport;
 import com.project.backend.models.Promotion;
 import com.project.backend.models.Voucher;
 import com.project.backend.repositories.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -14,7 +16,7 @@ public class VoucherService {
     @Autowired
     private VoucherRepository repository;
 
-    public void addVoucher(Integer userId, Promotion promotion){
+    public boolean addVoucher(Integer userId, Promotion promotion){
         Voucher voucher = new Voucher();
         String code = voucherCodeGenerator();
 
@@ -26,6 +28,7 @@ public class VoucherService {
         voucher.setBelongToUser(userId);
         voucher.setPromotionId(promotion.getId());
         repository.save(voucher);
+        return true;
     }
 
     // helper
@@ -50,4 +53,12 @@ public class VoucherService {
 
     }
 
+    public boolean deleteVoucher(String id) {
+        Optional<Voucher> voucher = repository.findById(id);
+        if (voucher.isPresent()) {
+            repository.delete(voucher.get());
+            return true;
+        }
+        return false;
+    }
 }

@@ -11,21 +11,26 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Planes")
-public class Plane {
+@Getter
+@Setter
+@Table(name = "model")
+public class Model {
 
     @Id
-    @Column(name = "code")
-    private String code;
+    @Column(name = "ICAO_code")
+    private String ICAOCode;
 
-    @Column(name = "model")
-    private String model;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "capacity")
-    private Integer capacity;
+    @Column(name = "seats")
+    private Integer seats;
 
+    @Column(name = "agent")
+    private String agent;
+
+    @Column(name = "speed")
+    private Double speed;
 }

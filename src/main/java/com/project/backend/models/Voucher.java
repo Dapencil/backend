@@ -9,13 +9,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Vouchers")
+@Table(name = "voucher")
 public class Voucher {
 
     @Id
@@ -26,7 +27,16 @@ public class Voucher {
     private Integer belongToUser;
 
     @Column(name = "promotion_id")
-    private Integer promotionId;
+    private String promotionId;
+
+    @Column(name = "mile_before_exchage")
+    private Integer mileBefore;
+
+    @Column(name = "issued_date")
+    private LocalDateTime issuedDate;
+
+    @Column(name = "valid_until")
+    private LocalDateTime validUntil;
 
     @Column(name = "is_used")
     private Boolean isUsed;
