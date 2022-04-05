@@ -35,7 +35,7 @@ public class ModelController {
     @PostMapping("")
     public ResponseEntity addModel(@RequestBody Model model){
         try{
-            Model item = modelService.addModel(model);
+            Model item = modelService.add(model);
             return ResponseEntity.ok(item);
         }catch (Exception e){
             return UtilHelper.exceptionMapper(e);
@@ -45,7 +45,7 @@ public class ModelController {
     @PutMapping("/{ICAO}")
     public ResponseEntity updateModel(@RequestBody Model model, @PathVariable String ICAO){
         try {
-            Model item = modelService.updateModel(model,ICAO);
+            Model item = modelService.update(model,ICAO);
             return ResponseEntity.ok(item);
         }catch (Exception e){
             return UtilHelper.exceptionMapper(e);
@@ -55,7 +55,7 @@ public class ModelController {
     @DeleteMapping("/{ICAO}")
     public ResponseEntity deleteModel(@PathVariable String ICAO){
         try {
-            Model item = modelService.deleteModel(ICAO);
+            Model item = modelService.delete(ICAO);
             return ResponseEntity.ok(item);
         }catch (Exception e){
             return UtilHelper.exceptionMapper(e);

@@ -24,7 +24,7 @@ public class ModelService {
         return item;
     }
 
-    public Model addModel(Model model){
+    public Model add(Model model){
         try{
             speedValidation(model.getSpeed());
             seatsValidation(model.getSeats());
@@ -35,7 +35,7 @@ public class ModelService {
         }
     }
 
-    public Model updateModel(Model newItem,String ICAO){
+    public Model update(Model newItem,String ICAO){
         try{
             Model item = findByICAO(ICAO);
             speedValidation(newItem.getSpeed());
@@ -46,7 +46,7 @@ public class ModelService {
         }
     }
 
-    public Model deleteModel(String ICAO){
+    public Model delete(String ICAO){
         Model item = findByICAO(ICAO);
         repository.delete(item);
         return item;
