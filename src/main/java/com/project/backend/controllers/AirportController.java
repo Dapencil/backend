@@ -27,13 +27,13 @@ public class AirportController {
     }
     @PostMapping("add")
     public boolean addAirport(@RequestBody Airport airport){
-        return airportService.addAirport(airport.getCode(),airport.getCountry_code(),
-                airport.getLatitude(),airport.getLongtitude(),airport.getName(),airport.getTime_zone());
+        return airportService.addAirport(airport.getCode(),airport.getCountryCode(),
+                airport.getLatitude(),airport.getLongtitude(),airport.getName(),airport.getTimeZone());
     }
     @PutMapping("update/{code}")
     public boolean updateAirport(@RequestBody Airport airport, @PathVariable String code){
-        return airportService.updateAirport(airport.getCode(),airport.getCountry_code(),
-                airport.getLatitude(),airport.getLongtitude(),airport.getName(),airport.getTime_zone());
+        return airportService.updateAirport(airport.getCode(),airport.getCountryCode(),
+                airport.getLatitude(),airport.getLongtitude(),airport.getName(),airport.getTimeZone());
     }
     @DeleteMapping("delete/{code}")
     public boolean deleteAirport(@PathVariable String code){

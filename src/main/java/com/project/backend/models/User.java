@@ -41,7 +41,7 @@ public class User {
     private LocalDate regisDate;
 
     @Column(name = "date_of_brith")
-    private LocalDate dob;
+    private LocalDate DOB;
 
     @Column(name = "total_mile")
     private Integer totalMile;

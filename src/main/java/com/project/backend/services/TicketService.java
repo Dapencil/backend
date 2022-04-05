@@ -27,7 +27,7 @@ public class TicketService {
         ticket.setInstanceId(instanceId);
         ticket.setUserId(userId);
         ticket.setVoucherCode(voucherCode);
-        ticket.setIssueDate(issuedDate);
+        ticket.setIssuedDate(issuedDate);
         repository.save(ticket);
         return true;
     }
@@ -37,7 +37,7 @@ public class TicketService {
         ticket.get().setInstanceId(instanceId);
         ticket.get().setUserId(userId);
         ticket.get().setVoucherCode(voucherCode);
-        ticket.get().setIssueDate(issuedDate);
+        ticket.get().setIssuedDate(issuedDate);
         return true;
     }
     public boolean deleteTicket(Integer id){

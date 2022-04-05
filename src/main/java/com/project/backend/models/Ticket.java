@@ -33,5 +33,5 @@ public class Ticket {
     private String voucherCode;
 
     @Column(name = "issued_date")
-    private LocalDateTime issueDate;
+    private LocalDateTime issuedDate;
 }

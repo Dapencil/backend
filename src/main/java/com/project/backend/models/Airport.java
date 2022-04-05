@@ -23,7 +23,7 @@ public class Airport {
     private String code;
 
     @Column(name = "country_code")
-    private String country_code;
+    private String countryCode;
 
     @Column(name = "latitude")
     private Double latitude;
@@ -35,5 +35,5 @@ public class Airport {
     private String name;
 
     @Column(name = "time_zone")
-    private String time_zone;
+    private String timeZone;
 }

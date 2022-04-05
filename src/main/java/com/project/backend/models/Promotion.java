@@ -35,4 +35,7 @@ public class Promotion {
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @Column(name = "limit_per_user")
+    private Integer limitPerUser;
+
 }

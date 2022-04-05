@@ -30,10 +30,10 @@ public class AirportService {
         Airport airport = new Airport();
         if (!checkCode(code)) { return false; }
         airport.setCode(code);
-        airport.setCountry_code(country);
+        airport.setCountryCode(country);
         airport.setLatitude(Math.round(latitude * 1000000d) / 1000000d); //round to %.6f
         airport.setLongtitude(Math.round(longtitude * 1000000d) / 1000000d);
-        airport.setTime_zone(timeZone);
+        airport.setTimeZone(timeZone);
         airport.setName(name);
         repository.save(airport);
         return true;
@@ -50,10 +50,10 @@ public class AirportService {
         Optional<Airport> airport = repository.findById(code);
         if (airport.isEmpty()) { return false; }
         airport.get().setName(name);
-        airport.get().setCountry_code(country);
+        airport.get().setCountryCode(country);
         airport.get().setLatitude(Math.round(latitude * 1000000d) / 1000000d);
         airport.get().setLongtitude(Math.round(longtitude * 1000000d) / 1000000d);
-        airport.get().setTime_zone(timeZone);
+        airport.get().setTimeZone(timeZone);
         repository.save(airport.get());
         return true;
     }

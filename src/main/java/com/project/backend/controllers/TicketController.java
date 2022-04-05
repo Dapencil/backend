@@ -26,12 +26,12 @@ public class TicketController {
     @PostMapping("add")
     public boolean addTicket(@RequestBody Ticket ticket){
         return ticketService.addTicket(ticket.getTicketId(),ticket.getInstanceId(),
-                ticket.getUserId(),ticket.getVoucherCode(),ticket.getIssueDate());
+                ticket.getUserId(),ticket.getVoucherCode(),ticket.getIssuedDate());
     }
     @PutMapping("update/{id}")
     public boolean updateTicket(@RequestBody Ticket ticket, @PathVariable Integer id){
         return ticketService.updateTicket(ticket.getTicketId(),ticket.getInstanceId(),
-                ticket.getUserId(),ticket.getVoucherCode(),ticket.getIssueDate());
+                ticket.getUserId(),ticket.getVoucherCode(),ticket.getIssuedDate());
     }
     @DeleteMapping("delete/{id}")
     public boolean deleteTicket(@PathVariable Integer id){
