@@ -1,4 +1,4 @@
-package com.project.backend.Utill;
+package com.project.backend.Util;
 
 public class TimeHelper {
     public boolean isEqual(){

@@ -1,5 +1,6 @@
 package com.project.backend.controllers;
 
+import com.project.backend.Util.UtilHelper;
 import com.project.backend.models.Aircraft;
 import com.project.backend.services.AircraftService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class AircraftController {
             Aircraft item = aircraftService.findByRegNum(regNum);
             return ResponseEntity.ok(item);
         }catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return UtilHelper.exceptionMapper(e);
         }
     }
 
@@ -41,7 +42,7 @@ public class AircraftController {
             Aircraft item = aircraftService.add(aircraft);
             return ResponseEntity.ok(item);
         }catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return UtilHelper.exceptionMapper(e);
         }
     }
 
@@ -52,7 +53,7 @@ public class AircraftController {
             Aircraft item = aircraftService.update(aircraft,regNum);
             return ResponseEntity.ok(item);
         }catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return UtilHelper.exceptionMapper(e);
         }
     }
 
@@ -63,7 +64,7 @@ public class AircraftController {
             return ResponseEntity.ok(item);
         }
         catch (Exception e){
-            return new ResponseEntity(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return UtilHelper.exceptionMapper(e);
         }
 
     }

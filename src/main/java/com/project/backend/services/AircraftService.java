@@ -1,6 +1,7 @@
 package com.project.backend.services;
 
 import com.project.backend.models.Aircraft;
+import com.project.backend.models.Airport;
 import com.project.backend.repositories.AircraftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,8 +46,7 @@ public class AircraftService {
     }
 
     public Aircraft delete(String regNum) {
-        Aircraft item = repository.findById(regNum)
-                .orElseThrow(() -> (new NoSuchElementException("aircraft not found.")));
+        Aircraft item = findByRegNum(regNum);
         repository.delete(item);
         return item;
     }

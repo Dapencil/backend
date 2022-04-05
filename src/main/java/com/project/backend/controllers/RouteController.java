@@ -27,8 +27,8 @@ public class RouteController {
         String tempFrom = objectNode.get("from").asText();
         String tempTo = objectNode.get("to").asText();
         String routeCode = objectNode.get("code").asText();
-        Airport fromAirport = airportService.findAirportByCode(tempFrom);
-        Airport toAirport = airportService.findAirportByCode(tempTo);
+        Airport fromAirport = airportService.findByCode(tempFrom);
+        Airport toAirport = airportService.findByCode(tempTo);
         try{
             Route route = routeService.addRoute(routeCode,fromAirport,toAirport);
             return String.format("from : %s to : %s distance %d taken time %d",route.getFromAirport(),route.getToAirport(),route.getDistance(),route.getTakenTime());
@@ -36,18 +36,22 @@ public class RouteController {
             return e.getMessage();
         }
     }
+
     @GetMapping("getAll")
     public List<Route> getRoute() {
         return routeService.getAllRoute();
     }
+
     @GetMapping("get/{routeCode}")
     public Route getRouteByCode(@PathVariable String routeCode){
         return routeService.findRouteByRouteCode(routeCode);
     }
+
     @PutMapping("update/{routeCode}")
     public boolean updateRoute(@RequestBody Route route, @PathVariable String routeCode){
         return routeService.updateRoute(route.getCode(),route.getFromAirport(),route.getToAirport());
     }
+
     @DeleteMapping("delete/{code}")
     public boolean deleteRoute(@PathVariable String code){
         return routeService.deleteRoute(code);
