@@ -1,44 +1,75 @@
 package com.project.backend.services;
 
-import com.project.backend.models.Aircraft;
 import com.project.backend.models.Model;
 import com.project.backend.repositories.ModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Service
 public class ModelService {
+
     @Autowired
     private ModelRepository repository;
-    public List<Model> getModel(){ return repository.findAll(); }
-    public Model findModelByCode(String code){ return repository.findById(code).get();}
-    public boolean addModel(String icao,String name,Integer seats,String agent,Double speed){
-        Model model = new Model();
-        model.setICAOCode(icao);
-        model.setName(name);
-        model.setSeats(seats);
-        model.setAgent(agent);
-        model.setSpeed(speed);
-        return true;
+
+    public List<Model> getAll(){
+        return repository.findAll();
     }
-    public boolean updateModel(String icao,String name,Integer seats,String agent,Double speed){
-        Optional<Model> model = repository.findById(icao);
-        if (model.isEmpty()){return false;}
-        model.get().setName(name);
-        model.get().setSeats(seats);
-        model.get().setAgent(agent);
-        model.get().setSpeed(speed);
-        return true;
+
+    public Model findByICAO(String ICAO){
+        Model item = repository.findById(ICAO)
+                .orElseThrow(() -> new NoSuchElementException("Doesn't exist"));
+        return item;
     }
-    public boolean deleteModel(String icao){
-        Optional<Model> model = repository.findById(icao);
-        if (model.isPresent()) {
-            repository.delete(model.get());
-            return true;
+
+    public Model add(Model model){
+        try{
+            speedValidation(model.getSpeed());
+            seatsValidation(model.getSeats());
+            model.setSpeed(roundNumber(model.getSpeed()));
+            return repository.save(model);
+        }catch (Exception e){
+            throw e;
         }
-        return false;
+    }
+
+    public Model update(Model newItem,String ICAO){
+        try{
+            Model item = findByICAO(ICAO);
+            speedValidation(newItem.getSpeed());
+            seatsValidation(newItem.getSeats());
+
+            item.setName(newItem.getName());
+            item.setAgent(newItem.getAgent());
+            item.setSeats(newItem.getSeats());
+            item.setSpeed(newItem.getSpeed());
+            return repository.save(item);
+        }catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public Model delete(String ICAO){
+        Model item = findByICAO(ICAO);
+        repository.delete(item);
+        return item;
+    }
+
+    private Double roundNumber(Double number){
+        return Math.round(number * 100d) / 100d;
+    }
+
+    private void speedValidation(Double speed){
+        if(speed<0){
+            throw new IllegalArgumentException("speed must be positive");
+        }
+    }
+
+    private void seatsValidation(Integer seats){
+        if(seats<0){
+            throw new IllegalArgumentException("seats must be positive");
+        }
     }
 }

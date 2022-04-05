@@ -1,5 +1,6 @@
 package com.project.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Getter
 @Setter
+@JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
 @Table(name = "airport")
 public class Airport {
 
@@ -23,7 +25,7 @@ public class Airport {
     private String code;
 
     @Column(name = "country_code")
-    private String country_code;
+    private String countryCode;
 
     @Column(name = "latitude")
     private Double latitude;
@@ -35,5 +37,5 @@ public class Airport {
     private String name;
 
     @Column(name = "time_zone")
-    private String time_zone;
+    private String timeZone;
 }

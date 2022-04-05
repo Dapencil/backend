@@ -1,12 +1,15 @@
 package com.project.backend.services;
 
 import com.project.backend.models.Aircraft;
+import com.project.backend.models.Airport;
 import com.project.backend.repositories.AircraftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,49 +19,38 @@ public class AircraftService {
 
     @Autowired
     private AircraftRepository repository;
-    public Aircraft findAircraftByCode(String code) {
-        Optional<Aircraft> aircraft = repository.findById(code);
-        if(aircraft.isEmpty()) { throw new RuntimeException("The aircraft doesn't exist"); }
-        return repository.findById(code).get();
+
+    public Aircraft findByRegNum(String regNum) {
+        Aircraft item = repository.findById(regNum)
+                .orElseThrow(() -> new NoSuchElementException("Doesn't exist"));
+        return item;
     }
 
-    public List<Aircraft> getAircraft() {
+    public List<Aircraft> getAll() {
         return repository.findAll();
     }
-    public boolean addAircraft(String regNum, String icaoCode, String msn, LocalDate fFlight, LocalDate dFlight){
-        if (!checkCode(regNum)) { return false; }
-        Aircraft aircraft = new Aircraft();
-        aircraft.setRegNum(regNum);
-        aircraft.setICAOCode(icaoCode);
-        aircraft.setMsn(msn);
-        aircraft.setFFlight(fFlight);
-        aircraft.setDFlight(dFlight);
-        repository.save(aircraft);
-        return true;
+
+    public Aircraft add(Aircraft newAircraft){
+        return repository.save(newAircraft);
     }
-    public boolean checkCode(String s){ //check HS-XXX
-        final String regex = "HS-[A-Z]{3}";
-        final String string = s;
-        final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        final Matcher matcher = pattern.matcher(string);
-        return matcher.matches();
-    }
-    public boolean updateAircraft(String regNum, String icaoCode, String msn, LocalDate fFlight, LocalDate dFlight) {
-        Optional<Aircraft> aircraft = repository.findById(regNum);
-        if(aircraft.isEmpty()) { return false; }
-        aircraft.get().setICAOCode(icaoCode);
-        aircraft.get().setMsn(msn);
-        aircraft.get().setFFlight(fFlight);
-        aircraft.get().setDFlight(dFlight);
-        repository.save(aircraft.get());
-        return true;
-    }
-    public boolean deletePlane(String code) {
-        Optional<Aircraft> aircraft = repository.findById(code);
-        if (aircraft.isPresent()) {
-            repository.delete(aircraft.get());
-            return true;
+
+    public Aircraft update(Aircraft newItem,String regNum){
+        try{
+            Aircraft item = findByRegNum(regNum);
+            item.setICAOCode(newItem.getICAOCode());
+            item.setMSN(newItem.getMSN());
+            item.setDeliverDate(newItem.getDeliverDate());
+            item.setFirstFlight(newItem.getFirstFlight());
+            return repository.save(item);
+        }catch (Exception e){
+            throw e;
         }
-        return false;
     }
+
+    public Aircraft delete(String regNum) {
+        Aircraft item = findByRegNum(regNum);
+        repository.delete(item);
+        return item;
+    }
+
 }

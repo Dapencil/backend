@@ -64,7 +64,7 @@ public class FlightInstanceService {
             //even i
             Flight toFLight = flightList.get(i-1);
             Flight returnFlight = flightList.get(i);
-            int takenTime = routeService.getAllRoute().stream().filter(route -> route.getCode().equals(toFLight.getRouteCode()))
+            int takenTime = routeService.getAll().stream().filter(route -> route.getCode().equals(toFLight.getRouteCode()))
                                         .collect(Collectors.toList()).get(0).getTakenTime();
 
             //ตอนนี้ต้องหาวันที่มากที่สุดแล้ว
@@ -106,7 +106,7 @@ public class FlightInstanceService {
     }
 
     private int getTakenTimeFromFlight(Flight toFlight){
-        int takenTime = routeService.getAllRoute().stream().filter(route -> route.getCode().equals(toFlight.getRouteCode()))
+        int takenTime = routeService.getAll().stream().filter(route -> route.getCode().equals(toFlight.getRouteCode()))
                 .collect(Collectors.toList()).get(0).getTakenTime();
         return takenTime;
     }

@@ -1,9 +1,10 @@
 package com.project.backend.controllers;
 
-import com.project.backend.models.Airport;
+import com.project.backend.Util.UtilHelper;
 import com.project.backend.models.Promotion;
 import com.project.backend.services.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,26 +16,52 @@ public class PromotionController {
     @Autowired
     private PromotionService promotionService;
 
-    @GetMapping("getAll")
+    @GetMapping("")
     public List<Promotion> getPromotions(){
-        return promotionService.getPromotion();
+        return promotionService.getAll();
     }
-    @GetMapping("get/{id}")
-    public Promotion findPromotionById(@PathVariable String id){
-        return promotionService.findPromotionById(id);
+
+    @GetMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity findPromotionById(@PathVariable String id){
+        try{
+            Promotion item = promotionService.findById(id);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
     }
-    @PostMapping("add")
-    public boolean addPromotion(@RequestBody Promotion promotion){
-        return promotionService.addPromotion(promotion.getId(),promotion.getTitle(),
-                promotion.getDescription(),promotion.getDiscountAmount(),promotion.getEndDate());
+
+    @PostMapping("")
+    @ResponseBody
+    public ResponseEntity addPromotion(@RequestBody Promotion promotion){
+        try{
+            Promotion item = promotionService.add(promotion);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
     }
-    @PutMapping("update/{id}")
-    public boolean updatePromotion(@RequestBody Promotion promotion, @PathVariable String id){
-        return promotionService.updatePromotion(promotion.getId(),promotion.getTitle(),
-                promotion.getDescription(),promotion.getDiscountAmount(),promotion.getEndDate());
+
+    @PutMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity updatePromotion(@RequestBody Promotion promotion, @PathVariable String id){
+        try{
+            Promotion item = promotionService.update(promotion,id);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
     }
-    @DeleteMapping("delete/{id}")
-    public boolean deletePromotion(@PathVariable String id){
-        return promotionService.deletePromotion(id);
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity deletePromotion(@PathVariable String id){
+        try{
+            Promotion item = promotionService.delete(id);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
     }
 }

@@ -54,7 +54,7 @@ public class FlightService {
         return matcher.matches();
     }
     private int getTakenTimeFromRoute(String routeCode){
-        Route route = routeService.getAllRoute().stream().filter(t -> t.getCode().equals(routeCode)).collect(Collectors.toList()).get(0);
+        Route route = routeService.getAll().stream().filter(t -> t.getCode().equals(routeCode)).collect(Collectors.toList()).get(0);
         return route.getTakenTime();
     }
 

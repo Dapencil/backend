@@ -1,11 +1,12 @@
 package com.project.backend.controllers;
 
 
+import com.project.backend.Util.UtilHelper;
 import com.project.backend.models.Airport;
-import com.project.backend.repositories.AirportRepository;
 import com.project.backend.services.AirportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,29 +15,59 @@ import java.util.List;
 @RestController
 @RequestMapping("api/airport")
 public class AirportController {
+
     @Autowired
     private AirportService airportService;
 
-    @GetMapping("getAll")
-    public List<Airport> getAirports() {
-        return airportService.getAirport();
+    @GetMapping("")
+    public List<Airport> getAll() {
+        return airportService.getAll();
     }
-    @GetMapping("get/{code}")
-    public Airport getAirportByCode(@PathVariable String code){
-        return airportService.findAirportByCode(code);
+
+    @GetMapping("/{code}")
+    @ResponseBody
+    public ResponseEntity getAirportByCode(@PathVariable String code){
+        try {
+            Airport item = airportService.findByCode(code);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
     }
-    @PostMapping("add")
-    public boolean addAirport(@RequestBody Airport airport){
-        return airportService.addAirport(airport.getCode(),airport.getCountry_code(),
-                airport.getLatitude(),airport.getLongtitude(),airport.getName(),airport.getTime_zone());
+
+    @PostMapping("")
+    @ResponseBody
+    public ResponseEntity addAirport(@RequestBody Airport airport){
+        try {
+            Airport item = airportService.add(airport);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
+
     }
-    @PutMapping("update/{code}")
-    public boolean updateAirport(@RequestBody Airport airport, @PathVariable String code){
-        return airportService.updateAirport(airport.getCode(),airport.getCountry_code(),
-                airport.getLatitude(),airport.getLongtitude(),airport.getName(),airport.getTime_zone());
+
+    @PutMapping("/{code}")
+    @ResponseBody
+    public ResponseEntity updateAirport(@RequestBody Airport airport, @PathVariable String code){
+        try{
+            Airport item = airportService.update(airport,code);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
+
     }
-    @DeleteMapping("delete/{code}")
-    public boolean deleteAirport(@PathVariable String code){
-        return airportService.deleteAirport(code);
+
+    @DeleteMapping("/{code}")
+    @ResponseBody
+    public ResponseEntity deleteAirport(@PathVariable String code){
+        try{
+            Airport item = airportService.delete(code);
+            return ResponseEntity.ok(item);
+        }catch(Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
+
     }
 }

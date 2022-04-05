@@ -1,6 +1,7 @@
 package com.project.backend.models;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.backend.keys.UserPK;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
 @AllArgsConstructor
 @Table(name = "user")
 @IdClass(UserPK.class)
@@ -41,7 +43,7 @@ public class User {
     private LocalDate regisDate;
 
     @Column(name = "date_of_brith")
-    private LocalDate dob;
+    private LocalDate DOB;
 
     @Column(name = "total_mile")
     private Integer totalMile;

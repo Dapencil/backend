@@ -1,9 +1,10 @@
 package com.project.backend.controllers;
 
-import com.project.backend.models.Airport;
+import com.project.backend.Util.UtilHelper;
 import com.project.backend.models.Ticket;
 import com.project.backend.services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,30 +12,56 @@ import java.util.List;
 @RestController
 @RequestMapping("api/ticket")
 public class TicketController {
+
     @Autowired
     private TicketService ticketService;
 
-    @GetMapping("getAll")
+    @GetMapping("")
     public List<Ticket> getTicket() {
-        return ticketService.getTicket();
-    }
-    @GetMapping("get/{id}")
-    public Ticket getTicketById(@PathVariable Integer id){
-        return ticketService.findTicketById(id);
+        return ticketService.getAll();
     }
 
-    @PostMapping("add")
-    public boolean addTicket(@RequestBody Ticket ticket){
-        return ticketService.addTicket(ticket.getTicketId(),ticket.getInstanceId(),
-                ticket.getUserId(),ticket.getVoucherCode(),ticket.getIssueDate());
+    @GetMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity getTicketById(@PathVariable Integer id){
+        try{
+            Ticket item = ticketService.findById(id);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
     }
-    @PutMapping("update/{id}")
-    public boolean updateTicket(@RequestBody Ticket ticket, @PathVariable Integer id){
-        return ticketService.updateTicket(ticket.getTicketId(),ticket.getInstanceId(),
-                ticket.getUserId(),ticket.getVoucherCode(),ticket.getIssueDate());
+
+    @PostMapping("")
+    @ResponseBody
+    public ResponseEntity addTicket(@RequestBody Ticket ticket){
+        try{
+            Ticket item = ticketService.add(ticket);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
     }
-    @DeleteMapping("delete/{id}")
-    public boolean deleteTicket(@PathVariable Integer id){
-        return ticketService.deleteTicket(id);
+
+    @PutMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity updateTicket(@RequestBody Ticket ticket, @PathVariable Integer id){
+        try{
+            Ticket item = ticketService.update(ticket,id);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity deleteTicket(@PathVariable Integer id){
+        try{
+            Ticket item = ticketService.delete(id);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
     }
 }
