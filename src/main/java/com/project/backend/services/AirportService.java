@@ -19,14 +19,14 @@ public class AirportService {
     @Autowired
     private AirportRepository repository;
 
+    public List<Airport> getAll() {
+        return repository.findAll();
+    }
+
     public Airport findByCode(String code) {
         Airport item = repository.findById(code)
                 .orElseThrow(() -> new NoSuchElementException("Doesn't exist"));
         return item;
-    }
-
-    public List<Airport> getAll() {
-        return repository.findAll();
     }
 
     public Airport add(Airport airport) {

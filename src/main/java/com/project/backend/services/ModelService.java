@@ -40,6 +40,11 @@ public class ModelService {
             Model item = findByICAO(ICAO);
             speedValidation(newItem.getSpeed());
             seatsValidation(newItem.getSeats());
+
+            item.setName(newItem.getName());
+            item.setAgent(newItem.getAgent());
+            item.setSeats(newItem.getSeats());
+            item.setSpeed(newItem.getSpeed());
             return repository.save(item);
         }catch (Exception e) {
             throw e;
