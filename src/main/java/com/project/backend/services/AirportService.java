@@ -39,15 +39,15 @@ public class AirportService {
         }
     }
 
-    public Airport update(Airport old,String code){
-        Airport item = findByCode(code);
+    public Airport update(Airport newItem,String code){
         try{
-            countryCodeValidation(old.getCountryCode());
-            item.setTimeZone(old.getTimeZone());
-            item.setCountryCode(old.getCountryCode());
-            item.setName(old.getName());
-            item.setLatitude(roundNumber(old.getLatitude()));
-            item.setLongtitude(roundNumber(old.getLongtitude()));
+            Airport item = findByCode(code);
+            countryCodeValidation(newItem.getCountryCode());
+            item.setTimeZone(newItem.getTimeZone());
+            item.setCountryCode(newItem.getCountryCode());
+            item.setName(newItem.getName());
+            item.setLatitude(roundNumber(newItem.getLatitude()));
+            item.setLongtitude(roundNumber(newItem.getLongtitude()));
             return repository.save(item);
         } catch (Exception e){
             throw e;

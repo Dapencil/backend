@@ -34,15 +34,17 @@ public class AircraftService {
         return repository.save(newAircraft);
     }
 
-    public Aircraft update(Aircraft old,String regNum) throws EntityNotFoundException {
-        Aircraft toBeUpdate = repository.findById(regNum)
-                .orElseThrow(() -> new NoSuchElementException("aircraft not found."));
-        toBeUpdate.setICAOCode(old.getICAOCode());
-        toBeUpdate.setMSN(old.getMSN());
-        toBeUpdate.setDeliverDate(old.getDeliverDate());
-        toBeUpdate.setFirstFlight(old.getFirstFlight());
-        return repository.save(toBeUpdate);
-
+    public Aircraft update(Aircraft newItem,String regNum){
+        try{
+            Aircraft item = findByRegNum(regNum);
+            item.setICAOCode(newItem.getICAOCode());
+            item.setMSN(newItem.getMSN());
+            item.setDeliverDate(newItem.getDeliverDate());
+            item.setFirstFlight(newItem.getFirstFlight());
+            return repository.save(item);
+        }catch (Exception e){
+            throw e;
+        }
     }
 
     public Aircraft delete(String regNum) {
