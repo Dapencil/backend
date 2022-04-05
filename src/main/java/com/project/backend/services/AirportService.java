@@ -67,7 +67,7 @@ public class AirportService {
         final Matcher matcher = pattern.matcher(code);
 
         if(!matcher.matches()){
-            throw new IllegalArgumentException("invalid code");
+            throw new IllegalArgumentException("invalid airport code");
         }
 
         return matcher.matches();

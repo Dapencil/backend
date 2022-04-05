@@ -1,12 +1,13 @@
 package com.project.backend.controllers;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.project.backend.Util.UtilHelper;
 import com.project.backend.models.Airport;
 import com.project.backend.models.Route;
 import com.project.backend.services.AirportService;
 import com.project.backend.services.RouteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,39 +23,57 @@ public class RouteController {
     @Autowired
     private AirportService airportService;
 
-    @PostMapping("add")
-    public String addRoute(@RequestBody ObjectNode objectNode){
-        String tempFrom = objectNode.get("from").asText();
-        String tempTo = objectNode.get("to").asText();
-        String routeCode = objectNode.get("code").asText();
-        Airport fromAirport = airportService.findByCode(tempFrom);
-        Airport toAirport = airportService.findByCode(tempTo);
-        try{
-            Route route = routeService.addRoute(routeCode,fromAirport,toAirport);
-            return String.format("from : %s to : %s distance %d taken time %d",route.getFromAirport(),route.getToAirport(),route.getDistance(),route.getTakenTime());
+    @GetMapping("")
+    public List<Route> getAll() {
+        return routeService.getAll();
+    }
+
+    @GetMapping("/{code}")
+    @ResponseBody
+    public ResponseEntity getRouteByCode(@PathVariable String code){
+        try {
+            Route item = routeService.findByCode(code);
+            return ResponseEntity.ok(item);
         }catch (Exception e){
-            return e.getMessage();
+            return UtilHelper.exceptionMapper(e);
         }
     }
 
-    @GetMapping("getAll")
-    public List<Route> getRoute() {
-        return routeService.getAllRoute();
+    @PostMapping("")
+    @ResponseBody
+    public ResponseEntity addRoute(@RequestBody Route route){
+        try{
+            Airport from = airportService.findByCode(route.getFromAirport());
+            Airport to = airportService.findByCode(route.getToAirport());
+            Route item = routeService.addRoute(route,from,to);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
     }
 
-    @GetMapping("get/{routeCode}")
-    public Route getRouteByCode(@PathVariable String routeCode){
-        return routeService.findRouteByRouteCode(routeCode);
+    @PutMapping("/{code}")
+    @ResponseBody
+    public ResponseEntity updateRoute(@RequestBody Route route, @PathVariable String routeCode){
+        try{
+            Airport from = airportService.findByCode(route.getFromAirport());
+            Airport to = airportService.findByCode(route.getToAirport());
+            Route item = routeService.updateRoute(route,from,to,routeCode);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
     }
 
-    @PutMapping("update/{routeCode}")
-    public boolean updateRoute(@RequestBody Route route, @PathVariable String routeCode){
-        return routeService.updateRoute(route.getCode(),route.getFromAirport(),route.getToAirport());
-    }
-
-    @DeleteMapping("delete/{code}")
-    public boolean deleteRoute(@PathVariable String code){
-        return routeService.deleteRoute(code);
+    @DeleteMapping("/{code}")
+    @ResponseBody
+    public ResponseEntity deleteRoute(@PathVariable String code){
+        try{
+            Route item = routeService.deleteRoute(code);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
     }
 
 }
