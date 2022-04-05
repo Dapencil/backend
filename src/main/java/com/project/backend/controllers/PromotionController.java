@@ -36,7 +36,7 @@ public class PromotionController {
     @ResponseBody
     public ResponseEntity addPromotion(@RequestBody Promotion promotion){
         try{
-            Promotion item = promotionService.addPromotion(promotion);
+            Promotion item = promotionService.add(promotion);
             return ResponseEntity.ok(item);
         }catch (Exception e){
             return UtilHelper.exceptionMapper(e);
@@ -47,7 +47,7 @@ public class PromotionController {
     @ResponseBody
     public ResponseEntity updatePromotion(@RequestBody Promotion promotion, @PathVariable String id){
         try{
-            Promotion item = promotionService.updatePromotion(promotion,id);
+            Promotion item = promotionService.update(promotion,id);
             return ResponseEntity.ok(item);
         }catch (Exception e){
             return UtilHelper.exceptionMapper(e);

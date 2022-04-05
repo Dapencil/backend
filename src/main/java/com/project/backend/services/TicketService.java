@@ -1,6 +1,5 @@
 package com.project.backend.services;
 
-import com.project.backend.models.Airport;
 import com.project.backend.models.Ticket;
 import com.project.backend.repositories.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,11 @@ import java.util.Optional;
 public class TicketService {
     @Autowired
     private TicketRepository repository;
+
     public Ticket findTicketById(Integer id) {
         return repository.findById(id).get();
     }
+
     public List<Ticket> getTicket() {
         return repository.findAll();
     }
@@ -31,6 +32,7 @@ public class TicketService {
         repository.save(ticket);
         return true;
     }
+
     public boolean updateTicket(Integer id, Integer instanceId, Integer userId, String voucherCode, LocalDateTime issuedDate){
         Optional<Ticket> ticket = repository.findById(id);
         if(ticket.isEmpty()) {return false;}
@@ -40,6 +42,7 @@ public class TicketService {
         ticket.get().setIssuedDate(issuedDate);
         return true;
     }
+
     public boolean deleteTicket(Integer id){
         Optional<Ticket> ticket = repository.findById(id);
         if(ticket.isPresent()){

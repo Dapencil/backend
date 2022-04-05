@@ -24,7 +24,7 @@ public class PromotionService {
         return item;
     }
 
-    public Promotion addPromotion(Promotion promotion){
+    public Promotion add(Promotion promotion){
         try {
             discountValidation(promotion.getDiscountAmount());
             dateValidation(promotion.getEndDate());
@@ -34,7 +34,7 @@ public class PromotionService {
         }
     }
 
-    public Promotion updatePromotion(Promotion newItem,String code) {
+    public Promotion update(Promotion newItem,String code) {
         try {
             Promotion item = findById(code);
             discountValidation(newItem.getDiscountAmount());

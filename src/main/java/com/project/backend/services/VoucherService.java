@@ -1,6 +1,5 @@
 package com.project.backend.services;
 
-import com.project.backend.models.Airport;
 import com.project.backend.models.Promotion;
 import com.project.backend.models.Voucher;
 import com.project.backend.repositories.VoucherRepository;
