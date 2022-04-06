@@ -21,6 +21,9 @@ public class FlightService {
     @Autowired
     private RouteService routeService;
 
+    @Autowired
+    private FlightInstanceService fiService;
+
 
     public List<Flight> getAll(){
         return repository.findAll();
@@ -38,8 +41,12 @@ public class FlightService {
             List<Flight> data = new ArrayList<>();
             Flight departureFlight = new Flight(flight.getFlightId(),flight.getRouteCode(),flight.getICAOCode(),flight.getDepartureTime(),flight.getFare())
                     ,arrivalFlight = new Flight(flight.getFlightId(),flight.getRouteCode(),flight.getICAOCode(),arrivalFlightTime(flight),flight.getFare());
-            data.add(repository.save(departureFlight));
-            data.add(repository.save(arrivalFlight));
+            departureFlight = repository.save(departureFlight);
+            arrivalFlight = repository.save(arrivalFlight);
+
+            fiService.firstInstanceGenerator(departureFlight,arrivalFlight);
+            data.add(departureFlight);
+            data.add(arrivalFlight);
             return data;
         }catch (Exception e){
             throw e;
@@ -102,13 +109,15 @@ public class FlightService {
         return departureTime;
     }
 
+    private int getTakenTimeFromRoute(String routeCode){
+        return routeService.getTakenTimeFromRoute(routeCode);
+    }
+
     private boolean fareValidation(Double fare){
         if(fare < 0) throw new IllegalArgumentException("Fare must be positive");
         return true;
     }
 
-    private int getTakenTimeFromRoute(String routeCode){
-        return routeService.findByCode(routeCode).getTakenTime();
-    }
+
 
 }

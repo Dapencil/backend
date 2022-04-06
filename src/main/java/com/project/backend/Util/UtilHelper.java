@@ -1,7 +1,6 @@
 package com.project.backend.Util;
 
 import com.project.backend.models.Promotion;
-import com.project.backend.models.User;
 import com.project.backend.models.Voucher;
 import com.project.backend.services.PromotionService;
 import com.project.backend.services.UserService;
@@ -11,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 

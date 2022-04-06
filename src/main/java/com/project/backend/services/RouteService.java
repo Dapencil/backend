@@ -73,6 +73,10 @@ public class RouteService {
         return item;
     }
 
+    public int getTakenTimeFromRoute(String routeCode){
+        return findByCode(routeCode).getTakenTime();
+    }
+
     //validate CUXXX
     private boolean codeValidation(String code){
         final String regex = "CU[0-9]{3}";
@@ -95,6 +99,7 @@ public class RouteService {
 
         return matcher.matches();
     }
+
 
     private Integer takenTime(double distance){
         return (int) (distance / planeVelocity) * 60;

@@ -54,11 +54,11 @@ public class RouteController {
 
     @PutMapping("/{code}")
     @ResponseBody
-    public ResponseEntity updateRoute(@RequestBody Route route, @PathVariable String routeCode){
+    public ResponseEntity updateRoute(@RequestBody Route route, @PathVariable String code){
         try{
             Airport from = airportService.findByCode(route.getFromAirport());
             Airport to = airportService.findByCode(route.getToAirport());
-            Route item = routeService.updateRoute(route,from,to,routeCode);
+            Route item = routeService.updateRoute(route,from,to,code);
             return ResponseEntity.ok(item);
         }catch (Exception e){
             return UtilHelper.exceptionMapper(e);
