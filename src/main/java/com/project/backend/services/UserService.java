@@ -17,13 +17,10 @@ public class UserService {
         return repository.findAll();
     }
 
-//    public User findById(Integer id){
-//        User item = repository.findById(id)
-//                .orElseThrow(() -> new NoSuchElementException("Doesn't exist"));
-//        return item;
-//    }
+    public User findById(Integer id){
+        User item = repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Doesn't exist"));
+        return item;
+    }
 
-//    public User getUserById(Integer id) {
-//        return repository.findById(id).get();
-//    }
 }

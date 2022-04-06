@@ -1,5 +1,7 @@
 package com.project.backend.services;
 
+import com.project.backend.models.Promotion;
+import com.project.backend.models.User;
 import com.project.backend.models.Voucher;
 import com.project.backend.repositories.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,11 @@ public class VoucherService {
     @Autowired
     private VoucherRepository repository;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired PromotionService promotionService;
+
     public List<Voucher> getAll(){
         return repository.findAll();
     }
@@ -29,6 +36,10 @@ public class VoucherService {
     public Voucher add(Voucher voucher){
         try{
             //TODO maybe fix
+            promotionChecker(voucher.getPromotionId(),voucher.getBelongToUser());
+            promotionMapper(voucher.getPromotionId(),voucher.getBelongToUser());
+
+
             voucher.setCode(voucherCodeGenerator());
             return repository.save(voucher);
         }catch (Exception e){
@@ -55,8 +66,11 @@ public class VoucherService {
         return item;
     }
 
-    public Optional<Voucher> promotionChecker(String promotionId,Integer userId){
-        return repository.checkPromotion(promotionId,userId);
+    private boolean promotionChecker(String promotionId,Integer userId){
+        if(repository.checkPromotion(promotionId,userId).isPresent()){
+            throw new IllegalArgumentException("You've already exchanged, calm down until next month. ");
+        }
+        return true;
     }
 
     private String voucherCodeGenerator(){
@@ -86,8 +100,35 @@ public class VoucherService {
     }
 
     // ถ้ามันทำได้ไม่ throw คือโอเค
-    private void promotionMapper(String promotionId){
+    private Promotion promotionMapper(String promotionId,Integer userId){
+        Promotion promotion = promotionService.findById(promotionId);
+        User user = userService.findById(userId);
 
+        if(promotionId.equals("p_001")){
+
+        }else if(promotionId.equals("p_002")){
+            if(user.getTotalMile()-50000<0){
+                throw new IllegalArgumentException("No enough mile");
+            }
+            user.setTotalMile(user.getTotalMile()-50000);
+        }else if(promotionId.equals("p_003")){
+            if(user.getTotalMile()-20000<0){
+                throw new IllegalArgumentException("No enough mile");
+            }
+            user.setTotalMile(user.getTotalMile()-20000);
+        }else if(promotionId.equals("p_004")){
+            if(user.getTotalMile()-10000<0){
+                throw new IllegalArgumentException("No enough mile");
+            }
+            user.setTotalMile(user.getTotalMile()-10000);
+        }else if(promotionId.equals("p_005")){
+
+        }else if(promotionId.equals("p_006")){
+
+        }else if(promotionId.equals("p_007")){
+
+        }
+        return promotion;
     }
 
 

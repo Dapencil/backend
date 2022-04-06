@@ -5,6 +5,7 @@ import com.project.backend.models.FlightInstance;
 import com.project.backend.repositories.FlightInstanceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ public class FlightInstanceService {
     private FlightInstanceRepository repository;
 
     @Autowired
+    @Lazy
     private FlightService flightService;
 
     @Autowired

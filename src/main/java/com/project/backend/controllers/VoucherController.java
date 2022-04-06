@@ -47,12 +47,12 @@ public class VoucherController {
         }
     }
 
-    @PostMapping("test")
-    public Optional<Voucher> test(@RequestBody ObjectNode node){
-        String promotion = node.get("p_id").asText();
-        Integer uid = Integer.parseInt(node.get("uid").asText());
-        return service.promotionChecker(promotion,uid);
-    }
+//    @PostMapping("test")
+//    public Optional<Voucher> test(@RequestBody ObjectNode node){
+//        String promotion = node.get("p_id").asText();
+//        Integer uid = Integer.parseInt(node.get("uid").asText());
+//        return service.promotionChecker(promotion,uid);
+//    }
 
     @PutMapping("/{code}")
     @ResponseBody

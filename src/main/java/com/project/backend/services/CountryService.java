@@ -38,7 +38,7 @@ public class CountryService {
     public Country update(Country newItem,String code){
         try{
             Country item = findByCode(code);
-            codeValidation(newItem.getCode());
+
             continentValidation(newItem.getContinent());
             item.setName(newItem.getName());
             item.setContinent(newItem.getContinent());
