@@ -1,43 +1,68 @@
 package com.project.backend.controllers;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.project.backend.Util.UtilHelper;
 import com.project.backend.models.Flight;
-import com.project.backend.services.FlightInstanceService;
 import com.project.backend.services.FlightService;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/flight")
 public class FlightController {
+
     @Autowired
     private FlightService flightService;
 
-    //tmp
-    @Autowired
-    private FlightInstanceService flightInstanceService;
-
-    @PostMapping("add")
-    public String addFlight(@RequestBody ObjectNode objectNode){
-        String routeCode = objectNode.get("routeCode").asText();
-        String planeCode = objectNode.get("planeCode").asText();
-        String departureTime = objectNode.get("departureTime").asText();
-        Double fare = objectNode.get("fare").asDouble();
-        String backDepartTime = flightService.backFlightDepartTime(routeCode,departureTime);
-        flightService.addFlight(routeCode,planeCode,departureTime,fare);
-        flightService.addFlight(routeCode,planeCode,backDepartTime,fare);
-        return backDepartTime;
-    }
-    @PutMapping("update/{id}")
-    public boolean updateFlight(@RequestBody Flight flight, @PathVariable Integer flightId){
-        return flightService.updateFlight(flight.getFlightId(),flight.getRouteCode(),
-                flight.getICAOCode(),flight.getDepartureTime(),flight.getFare());
-    }
-    @DeleteMapping("delete/{id}")
-    public boolean deleteFlight(@PathVariable Integer flightId){
-        return flightService.deleteFlight(flightId);
+    @GetMapping("")
+    public List<Flight> getAll(){
+        return flightService.getAll();
     }
 
+    @GetMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity getById(@PathVariable Integer id){
+        try{
+            Flight item = flightService.findById(id);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
+    }
+
+    @PostMapping("")
+    @ResponseBody
+    public ResponseEntity addFlight(@RequestBody Flight flight){
+        try{
+            List<Flight> item = flightService.add(flight);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
+    }
+
+    @PutMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity updateFlight(@RequestBody Flight flight ,@PathVariable Integer id){
+        try{
+            List<Flight> item = flightService.update(flight,id);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity deleteFlight(@PathVariable Integer id){
+        try{
+            List<Flight> item = flightService.delete(id);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
+    }
 
 }

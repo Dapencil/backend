@@ -15,7 +15,7 @@ public class UserController {
     private UserService userService;
     @GetMapping("getAll")
     public List<User> getUser() {
-        return userService.getUser();
+        return userService.getAll();
     }
 //    @GetMapping("get/{id}")
 //    public User getUserById(@PathVariable Integer id){

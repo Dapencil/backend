@@ -1,6 +1,7 @@
 package com.project.backend.services;
 
 import com.project.backend.models.Promotion;
+import com.project.backend.models.User;
 import com.project.backend.repositories.PromotionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,4 +70,5 @@ public class PromotionService {
             return true;
         }else throw  new IllegalArgumentException("end date must be after today");
     }
+
 }

@@ -27,7 +27,7 @@ public class FlightInstanceService {
     private RouteService routeService;
 
     public void instanceGenerator(){
-        List<Flight> flightList = flightService.getAllFlight();
+        List<Flight> flightList = flightService.getAll();
         for (int i = 1; i <= flightList.size(); i+=2) {
             Flight toFLight = flightList.get(i-1);
             Flight returnFlight = flightList.get(i);
@@ -58,7 +58,7 @@ public class FlightInstanceService {
     }
 
     public void firstInstanceGenerator(){
-        List<Flight> flightList = flightService.getAllFlight();
+        List<Flight> flightList = flightService.getAll();
         for (int i = 1; i <= flightList.size(); i+=2) {
             //odd i-1
             //even i

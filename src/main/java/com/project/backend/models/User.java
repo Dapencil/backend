@@ -19,14 +19,12 @@ import java.util.Date;
 @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
 @AllArgsConstructor
 @Table(name = "user")
-@IdClass(UserPK.class)
 public class User {
 
     @Id
     @Column(name = "id")
     private Integer id;
 
-    @Id
     @Column(name = "username")
     private String username;
 

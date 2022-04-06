@@ -31,7 +31,7 @@ public class Voucher {
     @Column(name = "promotion_id")
     private String promotionId;
 
-    @Column(name = "mile_before_exchage")
+    @Column(name = "mile_before_exchange")
     private Integer mileBefore;
 
     @Column(name = "issued_date")
