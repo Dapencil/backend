@@ -109,10 +109,12 @@ public class FlightInstanceService {
         }
     }
 
+    //TODO make this method
     private void addInstance(int flightId,LocalDateTime date){
         FlightInstance instance = new FlightInstance();
         instance.setFlightId(flightId);
         instance.setFlightDate(date);
+        instance.setAircraftRegNum("TBA");
         repository.save(instance);
     }
 

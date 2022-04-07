@@ -26,7 +26,7 @@ public class FlightInstanceController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    public ResponseEntity getAirportByCode(@PathVariable Integer id){
+    public ResponseEntity getFIByCode(@PathVariable Integer id){
         try {
             FlightInstance item = fiService.findById(id);
             return ResponseEntity.ok(item);
@@ -38,7 +38,7 @@ public class FlightInstanceController {
 
     @PutMapping("/{id}")
     @ResponseBody
-    public ResponseEntity updateAirport(@RequestBody FlightInstance instance, @PathVariable Integer id){
+    public ResponseEntity updateFI(@RequestBody FlightInstance instance, @PathVariable Integer id){
         try{
             FlightInstance item = fiService.update(instance,id);
             return ResponseEntity.ok(item);
@@ -50,7 +50,7 @@ public class FlightInstanceController {
 
     @DeleteMapping("/{id}")
     @ResponseBody
-    public ResponseEntity deleteAirport(@PathVariable Integer id){
+    public ResponseEntity deleteFI(@PathVariable Integer id){
         try{
             FlightInstance item = fiService.delete(id);
             return ResponseEntity.ok(item);
