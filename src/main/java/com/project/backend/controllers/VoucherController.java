@@ -1,7 +1,6 @@
 package com.project.backend.controllers;
 
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.project.backend.Util.UtilHelper;
 import com.project.backend.models.Voucher;
 import com.project.backend.services.VoucherService;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/voucher")
@@ -46,13 +44,6 @@ public class VoucherController {
             return UtilHelper.exceptionMapper(e);
         }
     }
-
-//    @PostMapping("test")
-//    public Optional<Voucher> test(@RequestBody ObjectNode node){
-//        String promotion = node.get("p_id").asText();
-//        Integer uid = Integer.parseInt(node.get("uid").asText());
-//        return service.promotionChecker(promotion,uid);
-//    }
 
     @PutMapping("/{code}")
     @ResponseBody

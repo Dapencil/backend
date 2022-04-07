@@ -39,6 +39,7 @@ public class FlightService {
 
     public List<Flight> add(Flight flight){
         try{
+
             fareValidation(flight.getFare());
             List<Flight> data = new ArrayList<>();
             Flight departureFlight = new Flight(flight.getFlightId(),flight.getRouteCode(),flight.getICAOCode(),flight.getDepartureTime(),flight.getFare())
@@ -118,6 +119,12 @@ public class FlightService {
     private boolean fareValidation(Double fare){
         if(fare < 0) throw new IllegalArgumentException("Fare must be positive");
         return true;
+    }
+
+    private void isPresent(Integer id){
+        if(repository.findById(id).isPresent()){
+            throw new IllegalArgumentException("This item has been in db.");
+        }
     }
 
 

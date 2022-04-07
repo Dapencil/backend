@@ -27,6 +27,7 @@ public class CountryService {
 
     public Country add(Country country){
         try {
+            isPresent(country.getCode());
             codeValidation(country.getCode());
             continentValidation(country.getContinent());
             return repository.save(country);
@@ -76,4 +77,9 @@ public class CountryService {
         return matcher.matches();
     }
 
+    private void isPresent(String code){
+        if(repository.findById(code).isPresent()){
+            throw new IllegalArgumentException("This item has been in db.");
+        }
+    }
 }

@@ -1,15 +1,14 @@
 package com.project.backend.services;
 
-import com.project.backend.models.Promotion;
 import com.project.backend.models.User;
 import com.project.backend.models.Voucher;
 import com.project.backend.repositories.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -36,11 +35,15 @@ public class VoucherService {
     public Voucher add(Voucher voucher){
         try{
             //TODO maybe fix
-            promotionChecker(voucher.getPromotionId(),voucher.getBelongToUser());
-            promotionMapper(voucher.getPromotionId(),voucher.getBelongToUser());
-
+            User user = userService.findById(voucher.getBelongToUser());
+            Integer mileBefore = user.getTotalMile();
+            promotionChecker(voucher.getPromotionId(),user.getId());
+            promotionMapper(voucher.getPromotionId(),user);
 
             voucher.setCode(voucherCodeGenerator());
+            voucher.setMileBefore(mileBefore);
+            voucher.setIsUsed(false);
+            voucher.setValidUntil(LocalDateTime.now().plusDays(30));
             return repository.save(voucher);
         }catch (Exception e){
             throw e;
@@ -94,16 +97,12 @@ public class VoucherService {
 
     }
 
-    // helper
     private boolean alreadyHaveCode(String code){
         return repository.findById(code).isPresent();
     }
 
-    // ถ้ามันทำได้ไม่ throw คือโอเค
-    private Promotion promotionMapper(String promotionId,Integer userId){
-        Promotion promotion = promotionService.findById(promotionId);
-        User user = userService.findById(userId);
-
+    // power of hard code
+    private boolean promotionMapper(String promotionId,User user){
         if(promotionId.equals("p_001")){
 
         }else if(promotionId.equals("p_002")){
@@ -128,7 +127,7 @@ public class VoucherService {
         }else if(promotionId.equals("p_007")){
 
         }
-        return promotion;
+        return true;
     }
 
 

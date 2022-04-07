@@ -27,6 +27,8 @@ public class PromotionService {
 
     public Promotion add(Promotion promotion){
         try {
+
+            isPresent(promotion.getId());
             discountValidation(promotion.getDiscountAmount());
             dateValidation(promotion.getEndDate());
             return repository.save(promotion);
@@ -44,7 +46,6 @@ public class PromotionService {
             item.setDescription(newItem.getDescription());
             item.setDiscountAmount(newItem.getDiscountAmount());
             item.setEndDate(newItem.getEndDate());
-            item.setLimitPerUser(newItem.getLimitPerUser());
             item.setTitle(newItem.getTitle());
             return repository.save(item);
         }catch (Exception e){
@@ -69,6 +70,12 @@ public class PromotionService {
         if(end.isAfter(toDay)){
             return true;
         }else throw  new IllegalArgumentException("end date must be after today");
+    }
+
+    private void isPresent(String code){
+        if(repository.findById(code).isPresent()){
+            throw new IllegalArgumentException("This item has been in db.");
+        }
     }
 
 }

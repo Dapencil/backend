@@ -26,6 +26,7 @@ public class ModelService {
 
     public Model add(Model model){
         try{
+            isPresent(model.getICAOCode());
             speedValidation(model.getSpeed());
             seatsValidation(model.getSeats());
             model.setSpeed(roundNumber(model.getSpeed()));
@@ -70,6 +71,12 @@ public class ModelService {
     private void seatsValidation(Integer seats){
         if(seats<0){
             throw new IllegalArgumentException("seats must be positive");
+        }
+    }
+
+    private void isPresent(String code){
+        if(repository.findById(code).isPresent()){
+            throw new IllegalArgumentException("This item has been in db.");
         }
     }
 }

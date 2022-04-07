@@ -31,6 +31,7 @@ public class AirportService {
 
     public Airport add(Airport airport) {
         try{
+            isPresent(airport.getCode());
             codeValidation(airport.getCode());
             countryCodeValidation(airport.getCountryCode());
             return repository.save(airport);
@@ -90,4 +91,9 @@ public class AirportService {
         return Math.round(number * 1000000d) / 1000000d;
     }
 
+    private void isPresent(String code){
+        if(repository.findById(code).isPresent()){
+            throw new IllegalArgumentException("This item has been in db.");
+        }
+    }
 }

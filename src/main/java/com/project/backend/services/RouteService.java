@@ -33,6 +33,7 @@ public class RouteService {
 
     public Route addRoute(Route route,Airport from,Airport to){
         try {
+            isPresent(route.getCode());
             codeValidation(route.getCode());
             airportValidation(route.getToAirport());
             airportValidation(route.getFromAirport());
@@ -124,5 +125,11 @@ public class RouteService {
         distance = (int)(c* mileConverter);
 
         return distance;
+    }
+
+    private void isPresent(String code){
+        if(repository.findById(code).isPresent()){
+            throw new IllegalArgumentException("This item has been in db.");
+        }
     }
 }

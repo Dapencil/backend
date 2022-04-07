@@ -20,6 +20,8 @@ import java.time.LocalDate;
 public class User {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="userSequenceGenerator")
+    @SequenceGenerator(allocationSize=1, name="userSequenceGenerator", sequenceName = "user_sequence")
     @Column(name = "id")
     private Integer id;
 
