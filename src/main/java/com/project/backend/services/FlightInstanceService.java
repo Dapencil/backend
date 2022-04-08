@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -54,16 +55,17 @@ public class FlightInstanceService {
     public void instanceGenerator(){
         List<Flight> flightList = flightService.getAll();
         for (int i = 1; i <= flightList.size(); i+=2) {
-            Flight toFLight = flightList.get(i-1);
+            Flight toFlight = flightList.get(i-1);
             Flight returnFlight = flightList.get(i);
-            int takenTime = getTakenTimeFromFlight(toFLight);
+            int takenTime = getTakenTimeFromFlight(toFlight);
 
             FlightInstance recent = getRecentInstance(returnFlight.getFlightId()+"");
 
-            LocalTime toTime = toFLight.getDepartureTime();
+            LocalTime toTime = toFlight.getDepartureTime();
             LocalDateTime toDate = recent.getFlightDate();
             LocalDateTime returnDate;
             boolean condition = toTime.getHour() < recent.getFlightDate().plusMinutes(takenTime).getHour();
+            List<FlightInstance> data = new ArrayList<>();
 
             if(condition){
                 toDate = toDate.with(toTime).plusDays(1);
@@ -71,13 +73,14 @@ public class FlightInstanceService {
             returnDate = toDate.plusMinutes(takenTime+60);
 
             for(int day = 1;day<=90;day++){
-                addInstance(toFLight.getFlightId(),toDate);
-                addInstance(returnFlight.getFlightId(),returnDate);
+                data.add(createInstance(toFlight.getFlightId(),toDate));
+                data.add(createInstance(returnFlight.getFlightId(),returnDate));
                 if(condition){
                     toDate = toDate.withDayOfYear(returnDate.getDayOfYear()).plusDays(1);
                 }else toDate = toDate.withDayOfYear(returnDate.getDayOfYear());
                 returnDate = toDate.plusMinutes(takenTime+60);
             }
+            repository.saveAll(data);
 
         }
     }
@@ -93,6 +96,7 @@ public class FlightInstanceService {
         LocalDateTime arrivalReturnDate = returnDate.plusMinutes(takenTime);
 
         boolean condition = toDate.getHour() < arrivalReturnDate.getHour();
+        List<FlightInstance> data = new ArrayList<>();
 
         if(condition){
             toDate = toDate.with(toTime).plusDays(1);
@@ -100,22 +104,24 @@ public class FlightInstanceService {
         returnDate = toDate.plusMinutes(takenTime+60);
 
         for(int day = 1;day<=90;day++){
-            addInstance(toFlight.getFlightId(),toDate);
-            addInstance(returnFlight.getFlightId(),returnDate);
+            data.add(createInstance(toFlight.getFlightId(),toDate));
+            data.add(createInstance(returnFlight.getFlightId(),returnDate));
             if(condition){
                 toDate = toDate.withDayOfYear(returnDate.getDayOfYear()).plusDays(1);
             }else toDate = toDate.withDayOfYear(returnDate.getDayOfYear());
             returnDate = toDate.plusMinutes(takenTime+60);
         }
+
+        repository.saveAll(data);
     }
 
     //TODO make this method
-    private void addInstance(int flightId,LocalDateTime date){
+    private FlightInstance createInstance(int flightId,LocalDateTime date){
         FlightInstance instance = new FlightInstance();
         instance.setFlightId(flightId);
         instance.setFlightDate(date);
         instance.setAircraftRegNum("TBA");
-        repository.save(instance);
+        return instance;
     }
 
     private FlightInstance getRecentInstance(String flightId){
