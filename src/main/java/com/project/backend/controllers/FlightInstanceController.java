@@ -26,7 +26,7 @@ public class FlightInstanceController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    public ResponseEntity getFIByCode(@PathVariable Integer id){
+    public ResponseEntity getFIByID(@PathVariable Integer id){
         try {
             FlightInstance item = fiService.findById(id);
             return ResponseEntity.ok(item);

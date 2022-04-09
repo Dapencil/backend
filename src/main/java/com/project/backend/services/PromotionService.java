@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 
 @Service
 public class PromotionService {
+
     @Autowired
     private PromotionRepository repository;
 

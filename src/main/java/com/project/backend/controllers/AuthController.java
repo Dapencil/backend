@@ -46,9 +46,8 @@ public class AuthController {
         }catch (Exception e){
             return new ResponseEntity("incorrect username or password", HttpStatus.BAD_REQUEST);
         }
-        log.info(request.getUsername()+" "+request.getPassword());
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new AuthResponse(jwt));
+        return ResponseEntity.ok(new AuthResponse(jwt,userDetails.getAuthorities()));
     }
 }

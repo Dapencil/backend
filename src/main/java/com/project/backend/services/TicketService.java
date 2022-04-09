@@ -28,6 +28,7 @@ public class TicketService {
 
     public Ticket add(Ticket ticket){
         try{
+            //TODO add number validation of ticket in that flight
             voucherValidation(ticket.getVoucherCode());
             return repository.save(ticket);
         }catch (Exception e){

@@ -1,14 +1,9 @@
 package com.project.backend.sec;
 
 import com.project.backend.models.User;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,6 +18,7 @@ public class CustomUserDetails implements UserDetails {
     public CustomUserDetails(User user){
         this.username = user.getUsername();
         this.password = user.getPassword();
+        //TODO fix this
         this.authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_PASSENGER"));
     }
 

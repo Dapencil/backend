@@ -42,6 +42,8 @@ public class FlightInstanceService {
     public FlightInstance update(FlightInstance newItem,Integer id){
         FlightInstance item = findById(id);
         item.setAircraftRegNum(newItem.getAircraftRegNum());
+        //not sure to change date or not
+//        item.setFlightDate(newItem.getFlightDate());
         return repository.save(item);
     }
 
