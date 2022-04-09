@@ -57,7 +57,7 @@ public class VoucherService {
 
             item.setValidUntil(newItem.getValidUntil());
             item.setIsUsed(newItem.getIsUsed());
-            return repository.save(newItem);
+            return repository.save(item);
         }catch (Exception e){
             throw e;
         }
@@ -130,5 +130,10 @@ public class VoucherService {
         return true;
     }
 
+    //TODO already use implementation
+    public boolean isUsed(Integer){
+
+        return
+    }
 
 }
