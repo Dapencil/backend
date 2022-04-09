@@ -131,9 +131,9 @@ public class VoucherService {
     }
 
     //TODO already use implementation
-    public boolean isUsed(Integer){
-
-        return
+    public boolean isUsed(String code){
+        Voucher item = findByCode(code);
+        return item.getIsUsed();
     }
 
 }
