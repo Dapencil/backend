@@ -48,7 +48,7 @@ public class AirportService {
             item.setCountryCode(newItem.getCountryCode());
             item.setName(newItem.getName());
             item.setLatitude(roundNumber(newItem.getLatitude()));
-            item.setLongtitude(roundNumber(newItem.getLongtitude()));
+            item.setLongitude(roundNumber(newItem.getLongitude()));
             return repository.save(item);
         } catch (Exception e){
             throw e;

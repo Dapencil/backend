@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ResFlightService {
+public class AvailableFlightService {
 
     @Autowired
     private AvailableFlightRepo repository;
 
-    public List<AvailableFlight> getFlightData(String from, String to, LocalDate date){
+    public List<AvailableFlight> getAvailable(String from, String to, LocalDate date){
         List<AvailableFlight> data = repository.findAll().stream()
                                         .filter(flight -> date.isEqual(flight.getFlightDate().toLocalDate()))
                                         .filter(flight -> flight.getFrom().equals(from))

@@ -108,8 +108,8 @@ public class RouteService {
 
     private Integer distanceFromAirport(Airport from,Airport to){
         Integer distance;
-        double fromLongtitude = Math.toRadians(from.getLongtitude());
-        double toLongtitude = Math.toRadians(to.getLongtitude());
+        double fromLongtitude = Math.toRadians(from.getLongitude());
+        double toLongtitude = Math.toRadians(to.getLongitude());
         double fromLatitude = Math.toRadians(from.getLatitude());
         double toLatitude = Math.toRadians(to.getLatitude());
 

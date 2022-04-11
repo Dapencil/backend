@@ -5,16 +5,16 @@ import com.project.backend.repositories.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class TicketService {
 
     @Autowired
     private TicketRepository repository;
+
+    @Autowired FlightInstanceService fiService;
 
     public List<Ticket> getAll() {
         return repository.findAll();
@@ -29,6 +29,7 @@ public class TicketService {
     public Ticket add(Ticket ticket){
         try{
             //TODO add number validation of ticket in that flight
+            isAbleToBook(ticket.getInstanceId());
             voucherValidation(ticket.getVoucherCode());
             return repository.save(ticket);
         }catch (Exception e){
@@ -55,6 +56,13 @@ public class TicketService {
         Ticket item = findById(id);
         repository.delete(item);
         return item;
+    }
+
+    private boolean isAbleToBook(Integer instanceId){
+        Integer seats = fiService.getSeats(instanceId);
+        Integer ticketCount = repository.getTicketCount(instanceId);
+        if(seats > ticketCount) return true;
+        else throw new IllegalArgumentException("Can't complete booking because seats reached maximum");
     }
 
     private boolean voucherValidation(String code){

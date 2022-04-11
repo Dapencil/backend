@@ -26,6 +26,10 @@ public class VoucherService {
         return repository.findAll();
     }
 
+    public List<Voucher> findByUserId(Integer id){
+        return repository.getByUserID(id);
+    }
+
     public Voucher findByCode(String code){
         Voucher item = repository.findById(code)
                         .orElseThrow(() -> new NoSuchElementException("Doesn't exist"));

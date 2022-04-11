@@ -33,6 +33,17 @@ public class VoucherController {
         }
     }
 
+    @GetMapping("/user/{id}")
+    @ResponseBody
+    public ResponseEntity getByUser(@PathVariable Integer id){
+        try{
+            List<Voucher> item = service.findByUserId(id);
+            return ResponseEntity.ok(item);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
+    }
+
     @PostMapping("")
     @ResponseBody
     public ResponseEntity addVoucher(@RequestBody Voucher voucher){

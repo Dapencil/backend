@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "flight_data")
+@Table(name = "available_flight")
 public class AvailableFlight {
 
     @Id
@@ -35,5 +35,10 @@ public class AvailableFlight {
 
     @Column(name = "to_airport")
     private String to;
+
+    @Column(name = "available_seats")
+    private Integer availableSeat;
+
+
 
 }

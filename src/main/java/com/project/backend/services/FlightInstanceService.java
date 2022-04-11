@@ -117,6 +117,10 @@ public class FlightInstanceService {
         repository.saveAll(data);
     }
 
+    public Integer getSeats(Integer instanceId){
+        return repository.getSeats(instanceId);
+    }
+
     //TODO make this method
     private FlightInstance createInstance(int flightId,LocalDateTime date){
         FlightInstance instance = new FlightInstance();
@@ -136,4 +140,5 @@ public class FlightInstanceService {
                 .collect(Collectors.toList()).get(0).getTakenTime();
         return takenTime;
     }
+
 }
