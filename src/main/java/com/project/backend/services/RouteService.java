@@ -33,6 +33,7 @@ public class RouteService {
 
     public Route addRoute(Route route,Airport from,Airport to){
         try {
+            isPresent(route.getCode());
             codeValidation(route.getCode());
             airportValidation(route.getToAirport());
             airportValidation(route.getFromAirport());
@@ -73,6 +74,10 @@ public class RouteService {
         return item;
     }
 
+    public int getTakenTimeFromRoute(String routeCode){
+        return findByCode(routeCode).getTakenTime();
+    }
+
     //validate CUXXX
     private boolean codeValidation(String code){
         final String regex = "CU[0-9]{3}";
@@ -96,14 +101,15 @@ public class RouteService {
         return matcher.matches();
     }
 
+
     private Integer takenTime(double distance){
         return (int) (distance / planeVelocity) * 60;
     }
 
     private Integer distanceFromAirport(Airport from,Airport to){
         Integer distance;
-        double fromLongtitude = Math.toRadians(from.getLongtitude());
-        double toLongtitude = Math.toRadians(to.getLongtitude());
+        double fromLongtitude = Math.toRadians(from.getLongitude());
+        double toLongtitude = Math.toRadians(to.getLongitude());
         double fromLatitude = Math.toRadians(from.getLatitude());
         double toLatitude = Math.toRadians(to.getLatitude());
 
@@ -119,5 +125,11 @@ public class RouteService {
         distance = (int)(c* mileConverter);
 
         return distance;
+    }
+
+    private void isPresent(String code){
+        if(repository.findById(code).isPresent()){
+            throw new IllegalArgumentException("This item has been in db.");
+        }
     }
 }

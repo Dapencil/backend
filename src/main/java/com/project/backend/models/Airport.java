@@ -31,7 +31,7 @@ public class Airport {
     private Double latitude;
 
     @Column(name = "longtitude")
-    private Double longtitude;
+    private Double longitude;
 
     @Column(name = "name")
     private String name;

@@ -2,7 +2,6 @@ package com.project.backend.models;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.project.backend.keys.UserPK;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -19,14 +17,14 @@ import java.util.Date;
 @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
 @AllArgsConstructor
 @Table(name = "user")
-@IdClass(UserPK.class)
 public class User {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="userSequenceGenerator")
+    @SequenceGenerator(allocationSize=1, name="userSequenceGenerator", sequenceName = "user_sequence")
     @Column(name = "id")
     private Integer id;
 
-    @Id
     @Column(name = "username")
     private String username;
 

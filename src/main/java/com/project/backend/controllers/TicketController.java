@@ -3,12 +3,14 @@ package com.project.backend.controllers;
 import com.project.backend.Util.UtilHelper;
 import com.project.backend.models.Ticket;
 import com.project.backend.services.TicketService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("api/ticket")
 public class TicketController {

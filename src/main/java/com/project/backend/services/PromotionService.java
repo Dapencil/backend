@@ -1,6 +1,7 @@
 package com.project.backend.services;
 
 import com.project.backend.models.Promotion;
+import com.project.backend.models.User;
 import com.project.backend.repositories.PromotionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import java.util.NoSuchElementException;
 
 @Service
 public class PromotionService {
+
     @Autowired
     private PromotionRepository repository;
 
@@ -26,6 +28,8 @@ public class PromotionService {
 
     public Promotion add(Promotion promotion){
         try {
+
+            isPresent(promotion.getId());
             discountValidation(promotion.getDiscountAmount());
             dateValidation(promotion.getEndDate());
             return repository.save(promotion);
@@ -43,7 +47,6 @@ public class PromotionService {
             item.setDescription(newItem.getDescription());
             item.setDiscountAmount(newItem.getDiscountAmount());
             item.setEndDate(newItem.getEndDate());
-            item.setLimitPerUser(newItem.getLimitPerUser());
             item.setTitle(newItem.getTitle());
             return repository.save(item);
         }catch (Exception e){
@@ -69,4 +72,11 @@ public class PromotionService {
             return true;
         }else throw  new IllegalArgumentException("end date must be after today");
     }
+
+    private void isPresent(String code){
+        if(repository.findById(code).isPresent()){
+            throw new IllegalArgumentException("This item has been in db.");
+        }
+    }
+
 }

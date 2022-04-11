@@ -1,22 +1,15 @@
 package com.project.backend.services;
 
-import com.project.backend.models.Airport;
 import com.project.backend.models.Flight;
-import com.project.backend.models.Route;
 import com.project.backend.repositories.FlightRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalTime;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -29,67 +22,111 @@ public class FlightService {
     @Autowired
     private RouteService routeService;
 
+    @Autowired
+    @Lazy
+    private FlightInstanceService fiService;
 
-    public List<Flight> getAllFlight(){
+
+    public List<Flight> getAll(){
         return repository.findAll();
     }
 
-    public boolean addFlight(String routeCode, String icao, String departureTime, Double fare){
-        if(fare < 0){ return false; }
-//        if (!checkTime(departureTime)) { return false; }
-        Flight flight = new Flight();
-        flight.setRouteCode(routeCode);
-        flight.setICAOCode(icao);
-        LocalTime time = LocalTime.parse(departureTime);
-        flight.setDepartureTime(time);
-        flight.setFare(fare);
-        repository.save(flight);
-        return true;
+    public Flight findById(Integer id){
+        Flight item = repository.findById(id)
+                      .orElseThrow(() -> new IllegalArgumentException("Doesn't exist"));
+        return item;
     }
-    public boolean checkTime(String time){
-        final String regex = "^(?:(?:([01]?\\d|2[0-3]):)?([0-5]?\\d):)?([0-5]?\\d)$";
-        final String string = time;
-        final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        final Matcher matcher = pattern.matcher(string);
-        return matcher.matches();
+
+    public List<Flight> add(Flight flight){
+        try{
+
+            fareValidation(flight.getFare());
+            List<Flight> data = new ArrayList<>();
+            Flight departureFlight = new Flight(flight.getFlightId(),flight.getRouteCode(),flight.getICAOCode(),flight.getDepartureTime(),flight.getFare())
+                    ,arrivalFlight = new Flight(flight.getFlightId(),flight.getRouteCode(),flight.getICAOCode(),arrivalFlightTime(flight),flight.getFare());
+            departureFlight = repository.save(departureFlight);
+            arrivalFlight = repository.save(arrivalFlight);
+
+            fiService.firstInstanceGenerator(departureFlight,arrivalFlight);
+            data.add(departureFlight);
+            data.add(arrivalFlight);
+            return data;
+        }catch (Exception e){
+            throw e;
+        }
     }
+
+    public List<Flight> update(Flight newItem,Integer id) {
+        try{
+            List<Flight> data = new ArrayList<>();
+            fareValidation(newItem.getFare());
+            Flight item = findById(id);
+            Flight siblingItem = findById(id%2==0? id-1:id+1);
+
+            item.setFare(newItem.getFare());
+            siblingItem.setFare(newItem.getFare());
+
+            item.setRouteCode(newItem.getRouteCode());
+            siblingItem.setRouteCode(newItem.getRouteCode());
+
+            item.setICAOCode(newItem.getRouteCode());
+            siblingItem.setICAOCode(newItem.getRouteCode());
+
+            item.setDepartureTime(newItem.getDepartureTime());
+            if(id%2==0){
+                siblingItem.setDepartureTime(departureFlightTime(newItem));
+            }else{
+                siblingItem.setDepartureTime(arrivalFlightTime(newItem));
+            }
+
+            data.add(repository.save(item));
+            data.add(repository.save(siblingItem));
+            return data;
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    public List<Flight> delete(Integer id) {
+        List<Flight> data = new ArrayList<>();
+        Flight item = findById(id);
+        Flight siblingItem = findById(id%2==0? id-1:id+1);
+        data.add(item);
+        data.add(siblingItem);
+        repository.delete(item);
+        repository.delete(siblingItem);
+        return  data;
+    }
+
+    private LocalTime arrivalFlightTime(Flight departureFlight) {
+        String routeCode = departureFlight.getRouteCode();
+        LocalTime arrivalTime = departureFlight.getDepartureTime()
+                                .plusMinutes(60+getTakenTimeFromRoute(routeCode));
+        return arrivalTime;
+    }
+
+    private LocalTime departureFlightTime(Flight arrivalFlight) {
+        String routeCode = arrivalFlight.getRouteCode();
+        LocalTime departureTime = arrivalFlight.getDepartureTime()
+                .minusMinutes(60+getTakenTimeFromRoute(routeCode));
+        return departureTime;
+    }
+
     private int getTakenTimeFromRoute(String routeCode){
-        Route route = routeService.getAll().stream().filter(t -> t.getCode().equals(routeCode)).collect(Collectors.toList()).get(0);
-        return route.getTakenTime();
+        return routeService.getTakenTimeFromRoute(routeCode);
     }
 
-    public String  backFlightDepartTime(String routeCode,String departureTime) {
-        try {
-            Date date = new SimpleDateFormat("HH:mm:ss").parse(departureTime);
-            Calendar calendar = Calendar.getInstance();
-            int temp = 60+getTakenTimeFromRoute(routeCode);
-            calendar.setTime(date);
-            calendar.add(Calendar.MINUTE,temp);
-            SimpleDateFormat converter = new SimpleDateFormat("HH:mm:ss");
-            return converter.format(calendar.getTime());
-        } catch (Exception e) {
-            return e.getMessage();
-        }
-    }
-
-    public boolean deleteFlight(Integer flightId) {
-        Optional<Flight> flight = repository.findById(flightId);
-        if (flight.isPresent()) {
-            repository.delete(flight.get());
-            return true;
-        }
-        return false;
-    }
-
-    public boolean updateFlight(Integer flightId, String routeCode, String icaoCode, LocalTime departureTime, Double fare) {
-        Optional<Flight> flight = repository.findById(flightId);
-        if (flight.isEmpty()){ return false;}
-        flight.get().setRouteCode(routeCode);
-        flight.get().setICAOCode(icaoCode);
-//        LocalTime time = LocalTime.parse(departureTime);
-        flight.get().setDepartureTime(departureTime);
-        flight.get().setFare(fare);
-        repository.save(flight.get());
+    private boolean fareValidation(Double fare){
+        if(fare < 0) throw new IllegalArgumentException("Fare must be positive");
         return true;
     }
+
+    private void isPresent(Integer id){
+        if(repository.findById(id).isPresent()){
+            throw new IllegalArgumentException("This item has been in db.");
+        }
+    }
+
+
+
 }

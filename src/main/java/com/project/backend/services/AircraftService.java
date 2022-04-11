@@ -31,6 +31,7 @@ public class AircraftService {
     }
 
     public Aircraft add(Aircraft newAircraft){
+        isPresent(newAircraft.getRegNum());
         return repository.save(newAircraft);
     }
 
@@ -51,6 +52,12 @@ public class AircraftService {
         Aircraft item = findByRegNum(regNum);
         repository.delete(item);
         return item;
+    }
+
+    private void isPresent(String regNum){
+        if(repository.findById(regNum).isPresent()){
+            throw new IllegalArgumentException("This item has been in db.");
+        }
     }
 
 }
