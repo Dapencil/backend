@@ -2,6 +2,7 @@ package com.project.backend.controllers;
 
 import com.project.backend.Util.UtilHelper;
 import com.project.backend.models.Airport;
+import com.project.backend.models.ResponseModel.UserResponse;
 import com.project.backend.models.User;
 import com.project.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/user")
@@ -18,8 +20,10 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("")
-    public List<User> getUser() {
-        return userService.getAll();
+    public List<UserResponse> getUser() {
+        List<User> data = userService.getAll();
+        List<UserResponse> res = data.stream().map(UserResponse::new).collect(Collectors.toList());
+        return res;
     }
 
     @GetMapping("/{id}")
@@ -27,7 +31,7 @@ public class UserController {
     public ResponseEntity getUserById(@PathVariable Integer id){
         try{
             User item = userService.findById(id);
-            return ResponseEntity.ok(item);
+            return ResponseEntity.ok(new UserResponse(item));
         }catch (Exception e){
             return UtilHelper.exceptionMapper(e);
         }
@@ -38,7 +42,7 @@ public class UserController {
     public ResponseEntity addUser(@RequestBody User user){
         try{
             User item = userService.add(user);
-            return ResponseEntity.ok(item);
+            return ResponseEntity.ok(new UserResponse(item));
         }catch (Exception e){
             return UtilHelper.exceptionMapper(e);
         }
@@ -49,7 +53,7 @@ public class UserController {
     public ResponseEntity updateUser(@RequestBody User user, @PathVariable Integer id){
         try{
             User item = userService.update(user,id);
-            return ResponseEntity.ok(item);
+            return ResponseEntity.ok(new UserResponse(item));
         }catch (Exception e){
             return UtilHelper.exceptionMapper(e);
         }
@@ -60,7 +64,7 @@ public class UserController {
     public ResponseEntity deleteUser(@PathVariable Integer id){
         try{
             User item = userService.delete(id);
-            return ResponseEntity.ok(item);
+            return ResponseEntity.ok(new UserResponse(item));
         }catch (Exception e){
             return UtilHelper.exceptionMapper(e);
         }

@@ -28,7 +28,6 @@ public class UserService {
     public User findById(Integer id){
         User item = repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Doesn't exist"));
-        item.setPassword("masked");
         return item;
     }
 
@@ -39,8 +38,6 @@ public class UserService {
         user.setTotalMile(0);
         user.setRole("ROLE_PASSENGER");
         repository.save(user);
-        //TODO maybe fix
-        user.setPassword("masked");
         return user;
     }
 
@@ -52,7 +49,6 @@ public class UserService {
         item.setFirstName(newItem.getFirstName());
         item.setLastName(newItem.getLastName());
         item = repository.save(item);
-        item.setPassword("masked");
         return item;
     }
 
@@ -60,7 +56,6 @@ public class UserService {
     public User delete(Integer id){
         User item = findById(id);
         repository.delete(item);
-        item.setPassword("masked");
         return item;
     }
 
