@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
 @AllArgsConstructor
-@Table(name = "flightInstance")
+@Table(name = "flightinstance")
 public class FlightInstance {
 
     @Id

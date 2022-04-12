@@ -66,7 +66,7 @@ public class TicketService {
     }
 
     private boolean voucherValidation(String code){
-        if(code.equals("") || code.length()==10){
+        if(code==null || code.length()==10){
             return true;
         }else throw new IllegalArgumentException("voucher code is not match pattern");
     }
