@@ -1,8 +1,10 @@
 package com.project.backend.services;
 
 import com.project.backend.models.Ticket;
+import com.project.backend.models.Voucher;
 import com.project.backend.repositories.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +16,11 @@ public class TicketService {
     @Autowired
     private TicketRepository repository;
 
-    @Autowired FlightInstanceService fiService;
+    @Autowired
+    private FlightInstanceService fiService;
+
+    @Autowired
+    private VoucherService voucherService;
 
     public List<Ticket> getAll() {
         return repository.findAll();
@@ -26,11 +32,16 @@ public class TicketService {
         return item;
     }
 
+    //TODO ADD MILE TO USER
     public Ticket add(Ticket ticket){
         try{
-            //TODO add number validation of ticket in that flight
             isAbleToBook(ticket.getInstanceId());
             voucherValidation(ticket.getVoucherCode());
+            if(ticket.getVoucherCode()!=null) {
+                Voucher item = voucherService.findByCode(ticket.getVoucherCode());
+                item.setIsUsed(true);
+                voucherService.update(item,item.getCode());
+            }
             return repository.save(ticket);
         }catch (Exception e){
             throw e;
@@ -40,7 +51,7 @@ public class TicketService {
     public Ticket update(Ticket newItem,Integer id){
         try {
             Ticket item = findById(id);
-            voucherValidation(newItem.getVoucherCode());
+//            voucherValidation(newItem.getVoucherCode());
 
             item.setIssuedDate(newItem.getIssuedDate());
             item.setInstanceId(newItem.getInstanceId());
@@ -66,8 +77,7 @@ public class TicketService {
     }
 
     private boolean voucherValidation(String code){
-        if(code==null || code.length()==10){
-            return true;
-        }else throw new IllegalArgumentException("voucher code is not match pattern");
+        if(code == null || code.length()==10) return true;
+        else throw new IllegalArgumentException("voucher code is not match pattern");
     }
 }

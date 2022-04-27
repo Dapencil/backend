@@ -1,6 +1,7 @@
 package com.project.backend.models.ResponseModel;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.backend.models.User;
 import lombok.Data;
 import lombok.Getter;
@@ -16,9 +17,9 @@ public class UserResponse {
 
     private Integer id;
     private String username;
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private LocalDate regisDate;
+    @JsonProperty("DOB")
     private LocalDate DOB;
     private Integer totalMile;
     private String role;
@@ -26,8 +27,7 @@ public class UserResponse {
     public UserResponse(User user){
         this.id = user.getId();
         this.username = user.getUsername();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
+        this.fullName = user.getFirstName()+" "+user.getLastName();
         this.regisDate = user.getRegisDate();
         this.DOB = user.getDOB();
         this.totalMile = user.getTotalMile();

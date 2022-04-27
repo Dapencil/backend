@@ -8,18 +8,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CustomUserDetails implements UserDetails {
 
+    private Integer id;
     private String username;
     private String password;
     private List<GrantedAuthority> authorities;
 
     public CustomUserDetails(User user){
+        this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
-        //TODO fix this
-        this.authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_PASSENGER"));
+        this.authorities = Arrays.stream(user.getRole().split(","))
+                            .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 
     public CustomUserDetails(){
@@ -38,6 +41,10 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public Integer getId(){
+        return id;
     }
 
     @Override

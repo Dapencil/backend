@@ -6,6 +6,8 @@ import com.project.backend.models.Voucher;
 import com.project.backend.services.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +35,19 @@ public class VoucherController {
         }
     }
 
+    @GetMapping("/use/{code}")
+    @ResponseBody
+    public ResponseEntity getDiscount(@PathVariable String code, Authentication authentication){
+        try{
+            Integer discount = service.useVoucher(code,authentication);
+            return ResponseEntity.ok(discount);
+        }catch (Exception e){
+            return UtilHelper.exceptionMapper(e);
+        }
+    }
+
     @GetMapping("/user/{id}")
+    @PreAuthorize("@secService.isMyPage(authentication, #id) or hasRole('MANAGER')")
     @ResponseBody
     public ResponseEntity getByUser(@PathVariable Integer id){
         try{

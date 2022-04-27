@@ -1,15 +1,19 @@
 package com.project.backend.services;
 
+import com.project.backend.models.Promotion;
 import com.project.backend.models.User;
 import com.project.backend.models.Voucher;
 import com.project.backend.repositories.VoucherRepository;
+import com.project.backend.sec.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class VoucherService {
@@ -27,7 +31,7 @@ public class VoucherService {
     }
 
     public List<Voucher> findByUserId(Integer id){
-        return repository.getByUserID(id);
+        return repository.getByUserID(id).stream().filter(voucher -> voucher.getValidUntil().isAfter(LocalDateTime.now())).collect(Collectors.toList());
     }
 
     public Voucher findByCode(String code){
@@ -38,7 +42,6 @@ public class VoucherService {
 
     public Voucher add(Voucher voucher){
         try{
-            //TODO maybe fix
             User user = userService.findById(voucher.getBelongToUser());
             Integer mileBefore = user.getTotalMile();
             promotionChecker(voucher.getPromotionId(),user.getId());
@@ -56,7 +59,6 @@ public class VoucherService {
 
     public Voucher update(Voucher newItem,String code){
         try{
-            //TODO maybe fix
             Voucher item = findByCode(code);
 
             item.setValidUntil(newItem.getValidUntil());
@@ -71,6 +73,21 @@ public class VoucherService {
         Voucher item = findByCode(id);
         repository.delete(item);
         return item;
+    }
+
+    //TODO already use implementation
+    public Integer useVoucher(String code, Authentication authentication){
+        CustomUserDetails details = (CustomUserDetails) authentication.getPrincipal();
+        Voucher item = findByCode(code);
+        Promotion promotion = promotionService.findById(item.getPromotionId());
+        if (item.getIsUsed()){
+            throw new IllegalArgumentException("This code has been used");
+        } else if(item.getBelongToUser() != details.getId()){
+            throw new IllegalArgumentException("This code is not your");
+        }else if(item.getValidUntil().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("This code has been expired");
+        }
+        return promotion.getDiscountAmount();
     }
 
     private boolean promotionChecker(String promotionId,Integer userId){
@@ -105,23 +122,23 @@ public class VoucherService {
         return repository.findById(code).isPresent();
     }
 
-    // power of hard code
+    //TODO TEST THAT MINUS MILE WORK
     private boolean promotionMapper(String promotionId,User user){
         if(promotionId.equals("p_001")){
 
         }else if(promotionId.equals("p_002")){
             if(user.getTotalMile()-50000<0){
-                throw new IllegalArgumentException("No enough mile");
+                throw new IllegalArgumentException("Not enough mile");
             }
             user.setTotalMile(user.getTotalMile()-50000);
         }else if(promotionId.equals("p_003")){
             if(user.getTotalMile()-20000<0){
-                throw new IllegalArgumentException("No enough mile");
+                throw new IllegalArgumentException("Not enough mile");
             }
             user.setTotalMile(user.getTotalMile()-20000);
         }else if(promotionId.equals("p_004")){
             if(user.getTotalMile()-10000<0){
-                throw new IllegalArgumentException("No enough mile");
+                throw new IllegalArgumentException("Not enough mile");
             }
             user.setTotalMile(user.getTotalMile()-10000);
         }else if(promotionId.equals("p_005")){
@@ -132,12 +149,6 @@ public class VoucherService {
 
         }
         return true;
-    }
-
-    //TODO already use implementation
-    public boolean isUsed(String code){
-        Voucher item = findByCode(code);
-        return item.getIsUsed();
     }
 
 }

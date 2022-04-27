@@ -18,7 +18,6 @@ public class AvailableFlightController {
     @Autowired
     private AvailableFlightService service;
 
-    //TODO date validation
     @GetMapping("")
     public List<AvailableFlight> getAvailableFlightFrom(@RequestParam String from, @RequestParam String to, @RequestParam LocalDate date){
         return service.getAvailable(from, to, date);

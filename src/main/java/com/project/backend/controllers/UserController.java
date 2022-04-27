@@ -7,6 +7,7 @@ import com.project.backend.models.User;
 import com.project.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public List<UserResponse> getUser() {
         List<User> data = userService.getAll();
         List<UserResponse> res = data.stream().map(UserResponse::new).collect(Collectors.toList());
@@ -27,6 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("@secService.isMyPage(authentication,#id) or hasRole('MANAGER')")
     @ResponseBody
     public ResponseEntity getUserById(@PathVariable Integer id){
         try{

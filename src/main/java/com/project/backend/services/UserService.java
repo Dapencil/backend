@@ -45,7 +45,6 @@ public class UserService {
     public User update(User newItem,Integer id){
         User item = findById(id);
         item.setDOB(newItem.getDOB());
-        item.setPassword(passwordEncoder.encode(newItem.getPassword()));
         item.setFirstName(newItem.getFirstName());
         item.setLastName(newItem.getLastName());
         item = repository.save(item);

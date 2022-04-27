@@ -1,6 +1,7 @@
 package com.project.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,9 +27,11 @@ public class Aircraft {
     private String regNum;
 
     @Column(name = "ICAO_code")
+    @JsonProperty("ICAOCode")
     private String ICAOCode;
 
     @Column(name = "MSN")
+    @JsonProperty("MSN")
     private String MSN;
 
     @Column(name = "first_flight")

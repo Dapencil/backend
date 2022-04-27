@@ -21,7 +21,7 @@ public class FlightInstance {
 
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="FISequenceGenerator")
-    @SequenceGenerator(allocationSize=1, name="FISequenceGenerator", sequenceName = "fi_sequence")
+    @SequenceGenerator(allocationSize=50, name="FISequenceGenerator", sequenceName = "fi_sequence")
     @Column(name = "instance_id")
     private Integer instanceId;
 

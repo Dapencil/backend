@@ -66,11 +66,8 @@ public class FlightService {
             item.setFare(newItem.getFare());
             siblingItem.setFare(newItem.getFare());
 
-            item.setRouteCode(newItem.getRouteCode());
-            siblingItem.setRouteCode(newItem.getRouteCode());
-
-            item.setICAOCode(newItem.getRouteCode());
-            siblingItem.setICAOCode(newItem.getRouteCode());
+            item.setICAOCode(newItem.getICAOCode());
+            siblingItem.setICAOCode(newItem.getICAOCode());
 
             item.setDepartureTime(newItem.getDepartureTime());
             if(id%2==0){
