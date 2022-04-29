@@ -1,7 +1,6 @@
 package com.project.backend.controllers;
 
 import com.project.backend.Util.UtilHelper;
-import com.project.backend.models.Airport;
 import com.project.backend.models.ResponseModel.UserResponse;
 import com.project.backend.models.User;
 import com.project.backend.sec.CustomUserDetails;

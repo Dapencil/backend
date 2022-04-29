@@ -51,6 +51,7 @@ public class VoucherService {
             voucher.setMileBefore(mileBefore);
             voucher.setIsUsed(false);
             voucher.setValidUntil(LocalDateTime.now().plusDays(30));
+            voucher.setIssuedDate(LocalDateTime.now());
             return repository.save(voucher);
         }catch (Exception e){
             throw e;
