@@ -3,6 +3,7 @@ package com.project.backend.controllers;
 
 import com.project.backend.Util.UtilHelper;
 import com.project.backend.models.Voucher;
+import com.project.backend.services.EmailService;
 import com.project.backend.services.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,8 @@ public class VoucherController {
 
     @Autowired
     private VoucherService service;
-
+    @Autowired
+    private EmailService emailService;
     @GetMapping("")
     public List<Voucher> getAll(){
         return service.getAll();
@@ -50,6 +52,7 @@ public class VoucherController {
         try{
             //TODO have switch with each promotion
             Voucher item = service.add(voucher);
+            //emailService.sendVoucherEmail();
             return ResponseEntity.ok(item);
         }catch (Exception e){
             return UtilHelper.exceptionMapper(e);
