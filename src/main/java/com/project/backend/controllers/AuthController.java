@@ -10,9 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -47,6 +52,7 @@ public class AuthController {
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new AuthResponse(jwt,userDetails.getAuthorities()));
+        List<String> item = userDetails.getAuthorities().stream().map(Objects::toString).collect(Collectors.toList());
+        return ResponseEntity.ok(new AuthResponse(jwt,item));
     }
 }

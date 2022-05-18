@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FlightInstanceRepository extends JpaRepository<FlightInstance,Integer> {
 
-    @Query(value = "select * from FlightInstances  where flight_id = ?1 order by instance_id desc limit 1",
+    @Query(value = "select * from flightinstance  where flight_id = ?1 order by instance_id desc limit 1",
             nativeQuery = true)
     FlightInstance getRecent(String flightId);
 

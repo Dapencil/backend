@@ -16,6 +16,7 @@ public class AvailableFlightService {
     private AvailableFlightRepo repository;
 
     public List<AvailableFlight> getAvailable(String from, String to, LocalDate date){
+        if(date.isBefore(LocalDate.now())) throw new IllegalArgumentException("Invalid date");
         List<AvailableFlight> data = repository.findAll().stream()
                                         .filter(flight -> date.isEqual(flight.getFlightDate().toLocalDate()))
                                         .filter(flight -> flight.getFrom().equals(from))

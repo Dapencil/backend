@@ -6,6 +6,8 @@ import com.project.backend.services.TicketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,7 +36,9 @@ public class TicketController {
         }
     }
 
+    //TODO MUST CHECK THAT THEY DON"T CREATE FOR ANOTHER USER
     @PostMapping("")
+    @PreAuthorize("@secService.isMyPage(authentication,#ticket.userId) or hasRole('MANAGER')")
     @ResponseBody
     public ResponseEntity addTicket(@RequestBody Ticket ticket){
         try{
