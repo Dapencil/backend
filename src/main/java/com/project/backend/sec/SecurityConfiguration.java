@@ -47,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/availableFlight").hasRole("PASSENGER")
                 .antMatchers(HttpMethod.POST,"/api/ticket").hasRole("PASSENGER")
                 .antMatchers(HttpMethod.POST,"/api/voucher").hasRole("PASSENGER")
-                .antMatchers(HttpMethod.GET,"/api/voucher/user/*").hasRole("PASSENGER")
+                .antMatchers(HttpMethod.GET,"/api/voucher/user/{.{10}}").hasRole("PASSENGER")
                 .antMatchers(HttpMethod.GET,"/api/user/**").hasRole("PASSENGER")
                 .and()
                 .authorizeRequests()
