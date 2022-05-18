@@ -36,6 +36,15 @@ public class AvailableFlight {
     @Column(name = "to_airport")
     private String to;
 
+    @Column(name = "from_timezone")
+    private String fromTimezone;
+
+    @Column(name = "to_timezone")
+    private String toTimezone;
+
+    @Column(name = "taken_time")
+    private Integer takenTime;
+
     @Column(name = "available_seats")
     private Integer availableSeat;
 
