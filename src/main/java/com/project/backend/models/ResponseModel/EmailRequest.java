@@ -11,4 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class EmailRequest {
     private String to;
+    private String bookNo;
+    private String name;
+    private String flightNo;
+    private String date;
+    private String where;
 }

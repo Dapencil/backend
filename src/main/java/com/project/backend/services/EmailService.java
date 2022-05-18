@@ -29,15 +29,24 @@ public class EmailService {
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
-    public void sendVoucherEmail(String to, String subject,String message){
+    public void sendVoucherEmail(String to, String code){
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom("noreply.ngew@gmail.com");
         simpleMailMessage.setTo(to);
-        simpleMailMessage.setSubject(subject);
-        simpleMailMessage.setText(message);
+        simpleMailMessage.setSubject("Your voucher");
+        simpleMailMessage.setText("Congratulations You get a voucher!"+"\n"+"Voucher:"+code);
         mailSender.send(simpleMailMessage);
     }
-    public void sendTicket(String to, Map<String, Object> model)  throws MessagingException, TemplateException, IOException{
+    public void sendTicketEmail(String to, String bookNo, String name, String flightNo, String date, String where){
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom("noreply.ngew@gmail.com");
+        simpleMailMessage.setTo(to);
+        simpleMailMessage.setSubject("Booking Confirmation");
+        simpleMailMessage.setText("Dear "+name+",\n"+"Thank you for choosing Ngew Airline! Your reservation has been confirmed.\n"
+        +"Your booking number : "+bookNo+"\nName of passenger : "+name+"\nDate : "+date+"\nFlight No. : "+flightNo+"\nFrom "+where);
+        mailSender.send(simpleMailMessage);
+    }
+    public void sendTicketHtml(String to, Map<String, Object> model)  throws MessagingException, TemplateException, IOException{
         MimeMessage message = mailSender.createMimeMessage();
         //setMedia
         MimeMessageHelper helper = new MimeMessageHelper(message,MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
@@ -53,17 +62,4 @@ public class EmailService {
         helper.setFrom("noreply.ngew@gmail.com","Reservations");
         mailSender.send(message);
     }
-//    public void sendHtmlEmail(String to, Ticket ticket) throws MessagingException, UnsupportedEncodingException {
-//        MimeMessage message = mailSender.createMimeMessage();
-//        MimeMessageHelper helper = new MimeMessageHelper(message);
-//        String mailContent ="<p><b>Dear Khun"+ticket.getUserId()+"</b></p>";
-//        mailContent+="<p>Thanks for choosing us! Your reservation has been confirmed.</p>";
-//        mailContent+="<p><b>Your Booking Details</b></p>";
-//        mailContent+="<p>Booking id: "+ticket.getTicketId()+"</p>";
-//        helper.setFrom("noreply.ngew@gmail.com","Reservations");
-//        helper.setTo(to);
-//        helper.setSubject("Ngew Air Booking Confirmation");
-//        helper.setText(mailContent,true);
-//        mailSender.send(message);
-//    }
 }
