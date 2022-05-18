@@ -24,12 +24,15 @@ public class VoucherController {
     private VoucherService service;
     @Autowired
     private EmailService emailService;
+
     @GetMapping("")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public List<Voucher> getAll(){
         return service.getAll();
     }
 
     @GetMapping("/{code}")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @ResponseBody
     public ResponseEntity getByCode(@PathVariable String code){
         try{
@@ -92,6 +95,7 @@ public class VoucherController {
     }
 
     @PutMapping("/{code}")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @ResponseBody
     public ResponseEntity updateVoucher(@RequestBody Voucher voucher,@PathVariable String code){
         try {
@@ -103,6 +107,7 @@ public class VoucherController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @ResponseBody
     public ResponseEntity deleteVoucher(@PathVariable String id){
         try{
