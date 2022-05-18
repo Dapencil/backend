@@ -23,7 +23,10 @@ public class AvailableFlightService {
                                         .filter(flight -> flight.getTo().equals(to))
                                         .collect(Collectors.toList());
         return data;
+    }
 
+    public AvailableFlight getById(Integer instanceId){
+        return repository.findById(instanceId).get();
     }
 
 }

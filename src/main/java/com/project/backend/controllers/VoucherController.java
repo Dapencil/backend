@@ -2,6 +2,7 @@ package com.project.backend.controllers;
 
 
 import com.project.backend.Util.UtilHelper;
+import com.project.backend.models.DTO.VoucherDTO;
 import com.project.backend.models.Voucher;
 import com.project.backend.services.EmailService;
 import com.project.backend.sec.CustomUserDetails;
@@ -50,17 +51,17 @@ public class VoucherController {
         }
     }
 
-    @GetMapping("/user/{id}")
-    @PreAuthorize("@secService.isMyPage(authentication, #id) or hasRole('MANAGER')")
-    @ResponseBody
-    public ResponseEntity getByUser(@PathVariable Integer id){
-        try{
-            List<Voucher> item = service.findByUserId(id);
-            return ResponseEntity.ok(item);
-        }catch (Exception e){
-            return UtilHelper.exceptionMapper(e);
-        }
-    }
+//    @GetMapping("/user/{id}")
+//    @PreAuthorize("@secService.isMyPage(authentication, #id) or hasRole('MANAGER')")
+//    @ResponseBody
+//    public ResponseEntity getByUser(@PathVariable Integer id){
+//        try{
+//            List<Voucher> item = service.findByUserId(id);
+//            return ResponseEntity.ok(item);
+//        }catch (Exception e){
+//            return UtilHelper.exceptionMapper(e);
+//        }
+//    }
 
     @GetMapping("/user/individual")
     @ResponseBody
@@ -68,7 +69,7 @@ public class VoucherController {
         try{
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             CustomUserDetails details = (CustomUserDetails) authentication.getPrincipal();
-            List<Voucher> item = service.findByUserId(details.getId());
+            List<VoucherDTO> item = service.findByUserId(details.getId());
             return ResponseEntity.ok(item);
         }catch (Exception e){
             return UtilHelper.exceptionMapper(e);
@@ -80,8 +81,10 @@ public class VoucherController {
     public ResponseEntity addVoucher(@RequestBody Voucher voucher){
         try{
             //TODO have switch with each promotion
-            Voucher item = service.add(voucher);
-            //emailService.sendVoucherEmail();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            CustomUserDetails details = (CustomUserDetails) authentication.getPrincipal();
+            Voucher item = service.add(voucher,details.getId());
+            emailService.sendVoucherEmail(details.getUsername(),item.getCode());
             return ResponseEntity.ok(item);
         }catch (Exception e){
             return UtilHelper.exceptionMapper(e);

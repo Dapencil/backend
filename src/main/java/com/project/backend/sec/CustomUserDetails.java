@@ -15,12 +15,14 @@ public class CustomUserDetails implements UserDetails {
     private Integer id;
     private String username;
     private String password;
+    private String fullName;
     private List<GrantedAuthority> authorities;
 
     public CustomUserDetails(User user){
         this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
+        this.fullName = user.getFirstName()+" "+user.getLastName();
         this.authorities = Arrays.stream(user.getRole().split(","))
                             .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
@@ -42,6 +44,8 @@ public class CustomUserDetails implements UserDetails {
     public String getUsername() {
         return username;
     }
+
+    public String getFullName() {return fullName;}
 
     public Integer getId(){
         return id;

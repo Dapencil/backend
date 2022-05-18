@@ -33,6 +33,7 @@ public class UserService {
 
     //only system
     public User add(User user){
+        isPresent(user.getUsername());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRegisDate(LocalDate.now());
         user.setTotalMile(0);
@@ -56,6 +57,12 @@ public class UserService {
         User item = findById(id);
         repository.delete(item);
         return item;
+    }
+
+    private void isPresent(String username){
+        if(repository.findAll().stream().anyMatch((item) -> item.getUsername().equals(username))){
+            throw new IllegalArgumentException("This item has been in db.");
+        }
     }
 
 }

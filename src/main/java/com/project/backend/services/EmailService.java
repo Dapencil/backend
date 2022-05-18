@@ -13,6 +13,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.Map;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import freemarker.template.Configuration;
@@ -29,6 +30,7 @@ public class EmailService {
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
+
     public void sendVoucherEmail(String to, String code){
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom("noreply.ngew@gmail.com");
@@ -37,7 +39,8 @@ public class EmailService {
         simpleMailMessage.setText("Congratulations You get a voucher!"+"\n"+"Voucher:"+code);
         mailSender.send(simpleMailMessage);
     }
-    public void sendTicketEmail(String to, String bookNo, String name, String flightNo, String date, String where){
+
+    public void sendTicketEmail(String to, Integer bookNo, String name, Integer flightNo, LocalDateTime date, String where){
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom("noreply.ngew@gmail.com");
         simpleMailMessage.setTo(to);
@@ -46,6 +49,7 @@ public class EmailService {
         +"Your booking number : "+bookNo+"\nName of passenger : "+name+"\nDate : "+date+"\nFlight No. : "+flightNo+"\nFrom "+where);
         mailSender.send(simpleMailMessage);
     }
+
     public void sendTicketHtml(String to, Map<String, Object> model)  throws MessagingException, TemplateException, IOException{
         MimeMessage message = mailSender.createMimeMessage();
         //setMedia

@@ -1,13 +1,18 @@
 package com.project.backend.controllers;
 
 import com.project.backend.Util.UtilHelper;
+import com.project.backend.models.ResponseModel.AvailableFlight;
 import com.project.backend.models.Ticket;
+import com.project.backend.sec.CustomUserDetails;
+import com.project.backend.services.EmailService;
+import com.project.backend.services.ResService.AvailableFlightService;
 import com.project.backend.services.TicketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +24,12 @@ public class TicketController {
 
     @Autowired
     private TicketService ticketService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private AvailableFlightService availableFlightService;
 
     @GetMapping("")
     public List<Ticket> getTicket() {
@@ -42,7 +53,11 @@ public class TicketController {
     @ResponseBody
     public ResponseEntity addTicket(@RequestBody Ticket ticket){
         try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            CustomUserDetails details = (CustomUserDetails) authentication.getPrincipal();
             Ticket item = ticketService.add(ticket);
+            AvailableFlight temp = availableFlightService.getById(item.getInstanceId());
+            emailService.sendTicketEmail(details.getUsername(),item.getTicketId(),details.getFullName(),temp.getFlightId(),temp.getFlightDate(),temp.getFrom()+" "+temp.getTo());
             return ResponseEntity.ok(item);
         }catch (Exception e){
             return UtilHelper.exceptionMapper(e);

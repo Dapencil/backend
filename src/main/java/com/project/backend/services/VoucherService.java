@@ -1,5 +1,6 @@
 package com.project.backend.services;
 
+import com.project.backend.models.DTO.VoucherDTO;
 import com.project.backend.models.Promotion;
 import com.project.backend.models.User;
 import com.project.backend.models.Voucher;
@@ -30,8 +31,8 @@ public class VoucherService {
         return repository.findAll();
     }
 
-    public List<Voucher> findByUserId(Integer id){
-        return repository.getByUserID(id).stream().filter(voucher -> voucher.getValidUntil().isAfter(LocalDateTime.now())).collect(Collectors.toList());
+    public List<VoucherDTO> findByUserId(Integer id){
+        return repository.getByUserID(id).stream().filter(voucher -> voucher.getvalid_until().isAfter(LocalDateTime.now())).collect(Collectors.toList());
     }
 
     public Voucher findByCode(String code){
@@ -40,9 +41,10 @@ public class VoucherService {
         return item;
     }
 
-    public Voucher add(Voucher voucher){
+    //
+    public Voucher add(Voucher voucher,Integer id){
         try{
-            User user = userService.findById(voucher.getBelongToUser());
+            User user = userService.findById(id);
             Integer mileBefore = user.getTotalMile();
             promotionChecker(voucher.getPromotionId(),user.getId());
             promotionMapper(voucher.getPromotionId(),user);

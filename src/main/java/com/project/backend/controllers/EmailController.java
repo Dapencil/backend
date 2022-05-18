@@ -36,16 +36,17 @@ public class EmailController {
             return UtilHelper.exceptionMapper(e);
         }
     }
-    @PostMapping("/send-ticket")
-    public ResponseEntity sendTicketEmail(@RequestBody EmailRequest request){
-        try{
-            emailService.sendTicketEmail(request.getTo(),request.getBookNo(),request.getName(),request.getFlightNo(),
-                    request.getDate(),request.getWhere());
-            return ResponseEntity.ok("Send success");
-        }catch (Exception e){
-            return UtilHelper.exceptionMapper(e);
-        }
-    }
+
+//    @PostMapping("/send-ticket")
+//    public ResponseEntity sendTicketEmail(@RequestBody EmailRequest request){
+//        try{
+//            emailService.sendTicketEmail(request.getTo(),request.getBookNo(),request.getName(),request.getFlightNo(),
+//                    request.getDate(),request.getWhere());
+//            return ResponseEntity.ok("Send success");
+//        }catch (Exception e){
+//            return UtilHelper.exceptionMapper(e);
+//        }
+//    }
 
 //    @PostMapping("/send-Html")
 //    public ResponseEntity sendTicketEmail(@RequestBody EmailRequest request) throws MessagingException, TemplateException, IOException {
