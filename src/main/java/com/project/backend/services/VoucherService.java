@@ -49,6 +49,7 @@ public class VoucherService {
             promotionChecker(voucher.getPromotionId(),user.getId());
             promotionMapper(voucher.getPromotionId(),user);
 
+            voucher.setBelongToUser(user.getId());
             voucher.setCode(voucherCodeGenerator());
             voucher.setMileBefore(mileBefore);
             voucher.setIsUsed(false);
