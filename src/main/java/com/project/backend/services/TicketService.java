@@ -3,14 +3,17 @@ package com.project.backend.services;
 import com.project.backend.models.Ticket;
 import com.project.backend.models.Voucher;
 import com.project.backend.repositories.TicketRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@Slf4j
 public class TicketService {
 
     @Autowired
@@ -37,11 +40,16 @@ public class TicketService {
         try{
             isAbleToBook(ticket.getInstanceId());
             voucherValidation(ticket.getVoucherCode());
-            if(ticket.getVoucherCode()!=null) {
+            if(!ticket.getVoucherCode().isBlank()) {
+                log.info("I'm in");
                 Voucher item = voucherService.findByCode(ticket.getVoucherCode());
                 item.setIsUsed(true);
                 voucherService.update(item,item.getCode());
+            }else{
+                ticket.setVoucherCode(null);
             }
+            log.info("Out");
+            ticket.setIssuedDate(LocalDateTime.now());
             return repository.save(ticket);
         }catch (Exception e){
             throw e;
@@ -51,8 +59,6 @@ public class TicketService {
     public Ticket update(Ticket newItem,Integer id){
         try {
             Ticket item = findById(id);
-//            voucherValidation(newItem.getVoucherCode());
-
             item.setIssuedDate(newItem.getIssuedDate());
             item.setInstanceId(newItem.getInstanceId());
             item.setUserId(newItem.getUserId());
@@ -72,12 +78,17 @@ public class TicketService {
     private boolean isAbleToBook(Integer instanceId){
         Integer seats = fiService.getSeats(instanceId);
         Integer ticketCount = repository.getTicketCount(instanceId);
-        if(seats > ticketCount) return true;
+        if(seats > ticketCount) {
+            log.info("can book");
+            return true;
+        }
         else throw new IllegalArgumentException("Can't complete booking because seats reached maximum");
     }
 
     private boolean voucherValidation(String code){
-        if(code == null || code.length()==10) return true;
+        log.info("code validation");
+        log.info(String.valueOf(code.isBlank()));
+        if(code.isBlank() || code.length()==10) return true;
         else throw new IllegalArgumentException("voucher code is not match pattern");
     }
 }

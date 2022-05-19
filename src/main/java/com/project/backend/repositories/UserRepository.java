@@ -17,11 +17,13 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByUserName(@Param("userName") String userName);
 
     @Query(value = "SELECT YEAR(regis_date) as year,MONTH(regis_date) as month,COUNT(*) as new_user_amount FROM user\n" +
-            "GROUP BY YEAR(regis_date),MONTH(regis_date);",nativeQuery = true)
+            "GROUP BY YEAR(regis_date),MONTH(regis_date)" +
+            "ORDER BY YEAR(regis_date),MONTH(regis_date);",nativeQuery = true)
     List<MonthlyUserDTO> getMonthlyUser();
 
     @Query(value = "SELECT YEAR(regis_date) as year,QUARTER(regis_date) as quarter,COUNT(*) as new_user_amount FROM user\n" +
-            "GROUP BY YEAR(regis_date),MONTH(regis_date);",nativeQuery = true)
+            "GROUP BY YEAR(regis_date),QUARTER(regis_date)" +
+            "ORDER BY YEAR(regis_date),QUARTER(regis_date);",nativeQuery = true)
     List<QuarterlyUserDTO> getQuarterUser();
 
     @Query(value = "SELECT MONTH(date_of_birth) as month_of_birth,COUNT(*) as user_count FROM user\n" +

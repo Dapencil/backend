@@ -48,6 +48,4 @@ public class AvailableFlight {
     @Column(name = "available_seats")
     private Integer availableSeat;
 
-
-
 }

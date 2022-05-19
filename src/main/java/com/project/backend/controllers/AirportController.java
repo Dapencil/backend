@@ -7,6 +7,7 @@ import com.project.backend.services.AirportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class AirportController {
     }
 
     @GetMapping("/{code}")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @ResponseBody
     public ResponseEntity getAirportByCode(@PathVariable String code){
         try {
@@ -36,6 +38,7 @@ public class AirportController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @ResponseBody
     public ResponseEntity addAirport(@RequestBody Airport airport){
         try {
@@ -48,6 +51,7 @@ public class AirportController {
     }
 
     @PutMapping("/{code}")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @ResponseBody
     public ResponseEntity updateAirport(@RequestBody Airport airport, @PathVariable String code){
         try{
@@ -60,6 +64,7 @@ public class AirportController {
     }
 
     @DeleteMapping("/{code}")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @ResponseBody
     public ResponseEntity deleteAirport(@PathVariable String code){
         try{

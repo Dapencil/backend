@@ -20,7 +20,8 @@ public interface TicketRepository extends JpaRepository<Ticket,Integer> {
             "ON fd.instance_id = ticket.instance_id\n" +
             "LEFT JOIN voucher_discount vd\n" +
             "ON vd.code = ticket.voucher_code\n" +
-            "GROUP BY YEAR(ticket.issued_date); ", nativeQuery = true)
+            "GROUP BY YEAR(ticket.issued_date)" +
+            "ORDER BY YEAR(ticket.issued_date); ", nativeQuery = true)
     List<AnnualyIncomeDTO> getAnnualIncome();
 
     @Query(value = "SELECT YEAR(issued_date) as year,QUARTER(issued_date) as quarter,SUM(fd.fare) - SUM(IFNull(vd.discount_amount,0)) as income FROM ticket \n" +
@@ -28,7 +29,8 @@ public interface TicketRepository extends JpaRepository<Ticket,Integer> {
             "ON fd.instance_id = ticket.instance_id\n" +
             "LEFT JOIN voucher_discount vd\n" +
             "ON vd.code = ticket.voucher_code\n" +
-            "GROUP BY YEAR(ticket.issued_date),QUARTER(issued_date); ",nativeQuery = true)
+            "GROUP BY YEAR(ticket.issued_date),QUARTER(issued_date) " +
+            "ORDER BY YEAR(ticket.issued_date),QUARTER(issued_date);",nativeQuery = true)
     List<QuarterlyIncomeDTO> getQuarterIncome();
 
     @Query(value = "SELECT YEAR(issued_date) as year,MONTH(issued_date) as month,SUM(fd.fare) - SUM(IFNull(vd.discount_amount,0)) as income FROM ticket \n" +
@@ -36,7 +38,8 @@ public interface TicketRepository extends JpaRepository<Ticket,Integer> {
             "ON fd.instance_id = ticket.instance_id\n" +
             "LEFT JOIN voucher_discount vd\n" +
             "ON vd.code = ticket.voucher_code\n" +
-            "GROUP BY YEAR(ticket.issued_date) , MONTH(ticket.issued_date); ",nativeQuery = true)
+            "GROUP BY YEAR(ticket.issued_date) , MONTH(ticket.issued_date)" +
+            "ORDER BY YEAR(ticket.issued_date),MONTH(issued_date);",nativeQuery = true)
     List<MonthlyIncomeDTO> getMonthlyIncome();
 
     @Query(value = "SELECT fd.code,YEAR(fd.flight_date) as year,QUARTER(fd.flight_date) as quarter,count(ticket.id) as ticket_count FROM ticket\n" +

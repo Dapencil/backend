@@ -49,12 +49,12 @@ public class TicketController {
 
     //TODO MUST CHECK THAT THEY DON"T CREATE FOR ANOTHER USER
     @PostMapping("")
-    @PreAuthorize("@secService.isMyPage(authentication,#ticket.userId) or hasRole('MANAGER')")
     @ResponseBody
     public ResponseEntity addTicket(@RequestBody Ticket ticket){
         try{
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             CustomUserDetails details = (CustomUserDetails) authentication.getPrincipal();
+            ticket.setUserId(details.getId());
             Ticket item = ticketService.add(ticket);
             AvailableFlight temp = availableFlightService.getById(item.getInstanceId());
             emailService.sendTicketEmail(details.getUsername(),item.getTicketId(),details.getFullName(),temp.getFlightId(),temp.getFlightDate(),temp.getFrom()+" "+temp.getTo());
